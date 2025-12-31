@@ -136,7 +136,7 @@ const config: Config = {
       tablet: { max: '1024px' },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [],
 };
 
 export default config;
