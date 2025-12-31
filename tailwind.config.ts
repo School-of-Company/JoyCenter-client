@@ -25,12 +25,32 @@ const config: Config = {
           '900': 'var(--color-gray-900)',
         },
         main: {
-          '100': 'var(--color-main-100)',
-          '200': 'var(--color-main-200)',
-          '300': 'var(--color-main-300)',
-          '400': 'var(--color-main-400)',
-          '500': 'var(--color-main-500)',
-          '600': 'var(--color-main-600)',
+          yellow: {
+            50: '#FDF8E8',
+            100: '#FBF0D0',
+            200: '#F7E1A1',
+            300: '#F3D372',
+            400: '#F2D06B',
+            500: '#EFC443',
+            600: '#BC9110',
+            700: '#8D6D0C',
+            800: '#5E4808',
+            900: '#2F2404',
+            950: '#171202',
+          },
+          green: {
+            50: '#F4F7ED',
+            100: '#DCFCE7',
+            200: '#D2E0B8',
+            300: '#86EFAC',
+            400: '#A5C171',
+            500: '#A2BF6B',
+            600: '#728E3E',
+            700: '#566B2E',
+            800: '#39471F',
+            900: '#1D240F',
+            950: '#0E1208',
+          },
         },
         transparent: 'transparent',
         black: 'var(--color-black)',
@@ -39,8 +59,10 @@ const config: Config = {
       },
       fontFamily: {
         Pretendard: ['Pretendard'],
+        suit: ['var(--font-suit)', 'sans-serif'],
       },
       fontSize: {
+        // 기존 Pretendard 폰트 사이즈
         h1m: ['1.875rem', { lineHeight: '2.25rem', fontWeight: '500' }],
         h2b: ['1.5rem', { lineHeight: '1.8rem', fontWeight: '600' }],
         h2r: ['1.5rem', { lineHeight: '1.8rem', fontWeight: '400' }],
@@ -54,6 +76,18 @@ const config: Config = {
         caption1r: ['0.875rem', { lineHeight: '1.225rem', fontWeight: '400' }],
         caption2b: ['0.75rem', { lineHeight: '1.125rem', fontWeight: '600' }],
         caption2r: ['0.75rem', { lineHeight: '1.125rem', fontWeight: '400' }],
+        // SUIT 폰트 사이즈
+        'suit-h1': ['36px', { lineHeight: '120%', fontWeight: '600' }],
+        'suit-h2': ['28px', { lineHeight: '120%', fontWeight: '600' }],
+        'suit-h3': ['24px', { lineHeight: '120%', fontWeight: '600' }],
+        'suit-h4': ['20px', { lineHeight: '120%', fontWeight: '500' }],
+        'suit-h5': ['20px', { lineHeight: '120%', fontWeight: '600' }],
+        'suit-body1': ['18px', { lineHeight: '140%', fontWeight: '600' }],
+        'suit-body2': ['16px', { lineHeight: '140%', fontWeight: '600' }],
+        'suit-body3': ['16px', { lineHeight: '140%', fontWeight: '400' }],
+        'suit-body4': ['14px', { lineHeight: '140%', fontWeight: '600' }],
+        'suit-body5': ['14px', { lineHeight: '140%', fontWeight: '400' }],
+        'suit-body6': ['12px', { lineHeight: '140%', fontWeight: '400' }],
       },
       spacing: {
         '0': '0',
@@ -111,13 +145,13 @@ const config: Config = {
       },
       borderRadius: {
         none: '0',
-        sm: '0.375rem', // 6px
-        md: '0.5rem', // 8px
-        lg: '0.75rem', // 12px
-        xl: '1rem', // 16px
-        '2xl': '1.5rem', // 24px
-        '3xl': '2rem', // 32px
-        full: '9999px', // 완전한 원형
+        sm: '0.375rem',
+        md: '0.5rem',
+        lg: '0.75rem',
+        xl: '1rem',
+        '2xl': '1.5rem',
+        '3xl': '2rem',
+        full: '9999px',
       },
       borderWidth: {
         '1': '0.0625rem',
