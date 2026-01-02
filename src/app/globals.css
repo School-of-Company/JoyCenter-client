@@ -39,25 +39,75 @@
   --color-black: #000000;
   --color-white: #ffffff;
   --color-error: #ef4444;
-
-  /* Font Families */
-  --font-family-pretendard: 'Pretendard', sans-serif;
-  --font-family-suit: var(--font-suit), sans-serif;
-
-  /* Font Sizes - SUIT */
-  --font-size-suit-h1: 36px;
-  --font-size-suit-h2: 28px;
-  --font-size-suit-h3: 24px;
-  --font-size-suit-h4: 20px;
-  --font-size-suit-h5: 20px;
-  --font-size-suit-body1: 18px;
-  --font-size-suit-body2: 16px;
-  --font-size-suit-body3: 16px;
-  --font-size-suit-body4: 14px;
-  --font-size-suit-body5: 14px;
-  --font-size-suit-body6: 12px;
 }
 
 html {
-  font-family: var(--font-family-pretendard);
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* Font Classes */
+.text-h1 {
+  font-size: 36px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-h2 {
+  font-size: 28px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 24px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-h4 {
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.text-h5 {
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-body1 {
+  font-size: 18px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body2 {
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body3 {
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 400;
+}
+
+.text-body4 {
+  font-size: 14px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body5 {
+  font-size: 14px;
+  line-height: 140%;
+  font-weight: 400;
+}
+
+.text-body6 {
+  font-size: 12px;
+  line-height: 140%;
+  font-weight: 400;
 }
