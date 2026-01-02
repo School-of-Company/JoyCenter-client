@@ -11,7 +11,7 @@ export default function Header() {
         <Link href="" className="text-body1 text-main-yellow-950">
           기관 소개
         </Link>
-        <Link href="/pages/post" className="text-body1 text-main-yellow-950">
+        <Link href="/post" className="text-body1 text-main-yellow-950">
           게시판
         </Link>
         <Link href="" className="text-body1 text-main-yellow-950">
