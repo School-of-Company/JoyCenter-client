@@ -1,26 +1,113 @@
 @import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Colors */
+  --color-gray-100: #f7fafc;
+  --color-gray-200: #edf2f7;
+  --color-gray-300: #e2e8f0;
+  --color-gray-400: #cbd5e0;
+  --color-gray-500: #a0aec0;
+  --color-gray-600: #718096;
+  --color-gray-700: #4a5568;
+  --color-gray-800: #2d3748;
+  --color-gray-900: #1a202c;
+
+  --color-main-yellow-50: #fdf8e8;
+  --color-main-yellow-100: #fbf0d0;
+  --color-main-yellow-200: #f7e1a1;
+  --color-main-yellow-300: #f3d372;
+  --color-main-yellow-400: #f2d06b;
+  --color-main-yellow-500: #efc443;
+  --color-main-yellow-600: #bc9110;
+  --color-main-yellow-700: #8d6d0c;
+  --color-main-yellow-800: #5e4808;
+  --color-main-yellow-900: #2f2404;
+  --color-main-yellow-950: #171202;
+
+  --color-main-green-50: #f4f7ed;
+  --color-main-green-100: #dcfce7;
+  --color-main-green-200: #d2e0b8;
+  --color-main-green-300: #86efac;
+  --color-main-green-400: #a5c171;
+  --color-main-green-500: #a2bf6b;
+  --color-main-green-600: #728e3e;
+  --color-main-green-700: #566b2e;
+  --color-main-green-800: #39471f;
+  --color-main-green-900: #1d240f;
+  --color-main-green-950: #0e1208;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-error: #ef4444;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  font-family: 'Pretendard', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Font Classes */
+.text-h1 {
+  font-size: 36px;
+  line-height: 120%;
+  font-weight: 600;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.text-h2 {
+  font-size: 28px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-size: 24px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-h4 {
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 500;
+}
+
+.text-h5 {
+  font-size: 20px;
+  line-height: 120%;
+  font-weight: 600;
+}
+
+.text-body1 {
+  font-size: 18px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body2 {
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body3 {
+  font-size: 16px;
+  line-height: 140%;
+  font-weight: 400;
+}
+
+.text-body4 {
+  font-size: 14px;
+  line-height: 140%;
+  font-weight: 600;
+}
+
+.text-body5 {
+  font-size: 14px;
+  line-height: 140%;
+  font-weight: 400;
+}
+
+.text-body6 {
+  font-size: 12px;
+  line-height: 140%;
+  font-weight: 400;
 }
