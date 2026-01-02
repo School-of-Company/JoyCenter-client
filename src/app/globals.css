@@ -2,15 +2,15 @@
 
 @theme {
   /* Colors */
-  --color-gray-100: #f7fafc;
+  --color-gray-100: #e6e6e7;
   --color-gray-200: #edf2f7;
   --color-gray-300: #e2e8f0;
   --color-gray-400: #cbd5e0;
-  --color-gray-500: #a0aec0;
+  --color-gray-500: #828387;
   --color-gray-600: #718096;
-  --color-gray-700: #4a5568;
+  --color-gray-700: #4e4f51;
   --color-gray-800: #2d3748;
-  --color-gray-900: #1a202c;
+  --color-gray-900: #1a1a1b;
 
   --color-main-yellow-50: #fdf8e8;
   --color-main-yellow-100: #fbf0d0;
