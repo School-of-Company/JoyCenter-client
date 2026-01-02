@@ -44,21 +44,6 @@
   --font-family-pretendard: 'Pretendard', sans-serif;
   --font-family-suit: var(--font-suit), sans-serif;
 
-  /* Font Sizes - Pretendard */
-  --font-size-h1m: 1.875rem;
-  --font-size-h2b: 1.5rem;
-  --font-size-h2r: 1.5rem;
-  --font-size-h3b: 1.25rem;
-  --font-size-h3r: 1.25rem;
-  --font-size-body1b: 1.125rem;
-  --font-size-body1r: 1.125rem;
-  --font-size-body2b: 1rem;
-  --font-size-body2r: 1rem;
-  --font-size-caption1b: 0.875rem;
-  --font-size-caption1r: 0.875rem;
-  --font-size-caption2b: 0.75rem;
-  --font-size-caption2r: 0.75rem;
-
   /* Font Sizes - SUIT */
   --font-size-suit-h1: 36px;
   --font-size-suit-h2: 28px;
@@ -71,6 +56,8 @@
   --font-size-suit-body4: 14px;
   --font-size-suit-body5: 14px;
   --font-size-suit-body6: 12px;
+
+  --border-1: 1px;
 }
 
 html {
