@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 
-@theme {
-  --font-sans: var(--font-pretendard), sans-serif;
-  --font-suit: var(--font-suit), sans-serif;
+html {
+  font-family: 'Pretendard';
 }
