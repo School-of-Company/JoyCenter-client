@@ -1,5 +1,78 @@
 @import 'tailwindcss';
 
+@theme {
+  /* Colors */
+  --color-gray-100: #f7fafc;
+  --color-gray-200: #edf2f7;
+  --color-gray-300: #e2e8f0;
+  --color-gray-400: #cbd5e0;
+  --color-gray-500: #a0aec0;
+  --color-gray-600: #718096;
+  --color-gray-700: #4a5568;
+  --color-gray-800: #2d3748;
+  --color-gray-900: #1a202c;
+
+  --color-main-yellow-50: #fdf8e8;
+  --color-main-yellow-100: #fbf0d0;
+  --color-main-yellow-200: #f7e1a1;
+  --color-main-yellow-300: #f3d372;
+  --color-main-yellow-400: #f2d06b;
+  --color-main-yellow-500: #efc443;
+  --color-main-yellow-600: #bc9110;
+  --color-main-yellow-700: #8d6d0c;
+  --color-main-yellow-800: #5e4808;
+  --color-main-yellow-900: #2f2404;
+  --color-main-yellow-950: #171202;
+
+  --color-main-green-50: #f4f7ed;
+  --color-main-green-100: #dcfce7;
+  --color-main-green-200: #d2e0b8;
+  --color-main-green-300: #86efac;
+  --color-main-green-400: #a5c171;
+  --color-main-green-500: #a2bf6b;
+  --color-main-green-600: #728e3e;
+  --color-main-green-700: #566b2e;
+  --color-main-green-800: #39471f;
+  --color-main-green-900: #1d240f;
+  --color-main-green-950: #0e1208;
+
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-error: #ef4444;
+
+  /* Font Families */
+  --font-family-pretendard: 'Pretendard', sans-serif;
+  --font-family-suit: var(--font-suit), sans-serif;
+
+  /* Font Sizes - Pretendard */
+  --font-size-h1m: 1.875rem;
+  --font-size-h2b: 1.5rem;
+  --font-size-h2r: 1.5rem;
+  --font-size-h3b: 1.25rem;
+  --font-size-h3r: 1.25rem;
+  --font-size-body1b: 1.125rem;
+  --font-size-body1r: 1.125rem;
+  --font-size-body2b: 1rem;
+  --font-size-body2r: 1rem;
+  --font-size-caption1b: 0.875rem;
+  --font-size-caption1r: 0.875rem;
+  --font-size-caption2b: 0.75rem;
+  --font-size-caption2r: 0.75rem;
+
+  /* Font Sizes - SUIT */
+  --font-size-suit-h1: 36px;
+  --font-size-suit-h2: 28px;
+  --font-size-suit-h3: 24px;
+  --font-size-suit-h4: 20px;
+  --font-size-suit-h5: 20px;
+  --font-size-suit-body1: 18px;
+  --font-size-suit-body2: 16px;
+  --font-size-suit-body3: 16px;
+  --font-size-suit-body4: 14px;
+  --font-size-suit-body5: 14px;
+  --font-size-suit-body6: 12px;
+}
+
 html {
-  font-family: 'Pretendard';
+  font-family: var(--font-family-pretendard);
 }
