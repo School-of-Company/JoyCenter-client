@@ -1,4 +1,14 @@
+'use client';
+
 import Picture from '@/shared/assets/svg/Picture';
+import PostCard from '@/shared/ui/PostCard';
+
+const recentPosts = [
+  { id: 1, title: '사진제목', author: '작성자', date: '2025-01-01' },
+  { id: 2, title: '사진제목', author: '작성자', date: '2025-01-01' },
+  { id: 3, title: '사진제목', author: '작성자', date: '2025-01-01' },
+  { id: 4, title: '사진제목', author: '작성자', date: '2025-01-01' },
+];
 
 export default function PostDetail() {
   return (
@@ -31,6 +41,19 @@ export default function PostDetail() {
               어쩌고저쩌고 어쩌고저쩌고 어쩌고저쩌고 어쩌고저쩌고 어쩌고저쩌고
             </p>
           </div>
+        </div>
+      </div>
+      <div className="px-3 py-10">
+        <h2 className="text-h2 mb-4">최신글</h2>
+        <div className="flex flex-col gap-6">
+          {recentPosts.map((post) => (
+            <PostCard
+              key={post.id}
+              title={post.title}
+              member={post.author}
+              onClick={() => console.log('Clicked post:', post.id)}
+            />
+          ))}
         </div>
       </div>
     </div>
