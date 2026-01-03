@@ -2,6 +2,7 @@ import Header from '@/widgets/header/ui';
 import CardImageIcon from '@/shared/assets/icons/CardImage';
 import PlayBtnIcon from '@/shared/assets/icons/PlayBtn';
 import FolderIcon from '@/shared/assets/icons/Folder';
+import Arrow from '@/shared/assets/svg/Arrow';
 
 export default function HomebasePage() {
   return (
@@ -9,7 +10,10 @@ export default function HomebasePage() {
       <Header />
       <div className="mt-9 flex justify-center">
         <div className="w-225 p-3">
-          <div className="text-body5 text-gray-900">돌아가기</div>
+          <div className="text-body5 flex items-center gap-2 text-gray-900">
+            <Arrow direction="left" width={12} height={12} color="#000000" />
+            <span>돌아가기</span>
+          </div>
           <div className="mt-3">
             <input
               type="text"
