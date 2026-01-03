@@ -14,7 +14,7 @@ export default function Header() {
         <Link href="/post" className="text-body1 text-main-yellow-950">
           게시판
         </Link>
-        <Link href="" className="text-body1 text-main-yellow-950">
+        <Link href="/post-write" className="text-body1 text-main-yellow-950">
           글쓰기
         </Link>
         <Link href="" className="text-body1 text-main-yellow-950">
