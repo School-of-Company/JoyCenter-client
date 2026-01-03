@@ -36,7 +36,7 @@ export default function HomebasePage() {
           </div>
           <textarea
             placeholder="글을 작성하세요"
-            className="text-body3 mt-2 min-h-125 w-full resize-none rounded-2xl border border-gray-100 p-5 text-gray-400 focus:outline-none"
+            className="text-body3 mt-2 min-h-125 w-full resize-none rounded-2xl border border-gray-100 p-5 placeholder-gray-400 focus:outline-none"
           />
           <div className="mt-3">
             <div className="flex justify-end gap-4 p-1 pr-2">
