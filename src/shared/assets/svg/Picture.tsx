@@ -1,9 +1,6 @@
-interface PictureProps {
-  width?: number | string;
-  height?: number | string;
-}
+import { SVGProps } from './types';
 
-export default function Picture({ width = 149, height = 96 }: PictureProps) {
+export default function Picture({ width = 149, height = 96 }: SVGProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
