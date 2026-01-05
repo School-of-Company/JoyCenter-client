@@ -16,7 +16,7 @@ export default function PostDetail() {
     <>
       <Header />
       <div className="flex justify-center">
-        <div className="mt-20 flex w-[1200px] justify-between">
+        <div className="mt-20 flex w-300 justify-between">
           <div className="flex flex-col">
             <div className="mb-3 p-3">
               <p className="text-h1">사진제목</p>
