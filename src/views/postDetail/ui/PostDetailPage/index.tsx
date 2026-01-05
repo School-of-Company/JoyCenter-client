@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import Picture from '@/shared/assets/svg/Picture';
 import PostCard from '@/shared/ui/PostCard';
 import Header from '@/widgets/header/ui';
@@ -12,6 +13,8 @@ const recentPosts = [
 ];
 
 export default function PostDetail() {
+  const router = useRouter();
+
   return (
     <>
       <Header />
@@ -57,7 +60,7 @@ export default function PostDetail() {
                   key={post.id}
                   title={post.title}
                   member={post.author}
-                  onClick={() => console.log('Clicked post:', post.id)}
+                  onClick={() => router.push(`/post-detail/${post.id}`)}
                 />
               ))}
             </div>
