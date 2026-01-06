@@ -1,4 +1,4 @@
-import { SVGProps } from './types';
+import { SVGProps } from '../../types/svgPropsType';
 
 export default function Picture({ width = 149, height = 96 }: SVGProps) {
   return (
