@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Picture from '@/shared/assets/svg/Picture';
 
 interface PostCardProps {
@@ -22,9 +23,11 @@ export default function PostCard({
     >
       <div className="flex h-22.5 w-40 items-center justify-center rounded-lg bg-[#D9D9D9]">
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={title}
+            width={64}
+            height={42}
             className="h-10.5 w-16 rounded-lg object-cover"
           />
         ) : (
