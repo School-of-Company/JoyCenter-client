@@ -1,10 +1,12 @@
 import Picture from '@/shared/assets/svg/Picture';
+import Image from 'next/image';
 
 interface PostPreviewProps {
   imageUrl?: string;
   member: string;
   title: string;
   date: string;
+  onClick?: () => void;
 }
 
 export default function PostPreview({
@@ -12,14 +14,20 @@ export default function PostPreview({
   member,
   title,
   date,
+  onClick,
 }: PostPreviewProps) {
   return (
-    <div className="flex w-91 flex-col gap-3 pb-3">
+    <div
+      className="flex w-91 cursor-pointer flex-col gap-3 pb-3"
+      onClick={onClick}
+    >
       <div className="flex h-51 items-center justify-center overflow-hidden rounded-2xl bg-[#D9D9D9]">
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={title}
+            width={364}
+            height={204}
             className="h-full w-full object-cover"
           />
         ) : (
