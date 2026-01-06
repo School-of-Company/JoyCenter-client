@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import Picture from '@/shared/assets/svg/Picture';
 import PostCard from '@/shared/ui/PostCard';
-import Header from '@/widgets/header/ui';
+import Header from '@/shared/ui/Header/ui';
 
 const recentPosts = [
   { id: 1, member: '작성자', title: '사진제목', date: '2025-01-01' },

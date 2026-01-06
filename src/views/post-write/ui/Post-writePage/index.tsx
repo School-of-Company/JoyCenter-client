@@ -1,4 +1,4 @@
-import Header from '@/widgets/header/ui';
+import Header from '@/shared/ui/Header/ui';
 import CardImageIcon from '@/shared/assets/icons/CardImage';
 import PlayBtnIcon from '@/shared/assets/icons/PlayBtn';
 import FolderIcon from '@/shared/assets/icons/Folder';
