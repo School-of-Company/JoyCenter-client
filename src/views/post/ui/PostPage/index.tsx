@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import SortDropDown from '@/shared/ui/SortDropDown';
 import PostPreview from '@/shared/ui/PostPreview';
 import Arrow from '@/shared/assets/svg/Arrow';
-import Header from '@/shared/ui/Header/ui';
+import Header from '@/shared/ui/Header';
 
 const postData = [
   { id: 1, member: '작성자', title: '사진제목', date: '2025-01-01' },
