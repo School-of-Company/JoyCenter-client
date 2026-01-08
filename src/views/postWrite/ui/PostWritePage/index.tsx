@@ -1,7 +1,7 @@
 import Header from '@/shared/ui/Header';
-import CardImageIcon from '@/shared/assets/icons/CardImage';
-import PlayBtnIcon from '@/shared/assets/icons/PlayBtn';
-import FolderIcon from '@/shared/assets/icons/Folder';
+import CardImageIcon from '@/shared/assets/svg/CardImage';
+import PlayBtnIcon from '@/shared/assets/svg/PlayBtn';
+import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 
 export default function HomebasePage() {
