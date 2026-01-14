@@ -3,11 +3,11 @@ import Link from 'next/link';
 
 export default function Header() {
   return (
-    <header className="border-main-yellow-200 flex w-full items-center justify-between border-b bg-white px-[356px] py-[5px]">
+    <header className="border-main-yellow-200 flex w-full items-center justify-around border-b bg-white py-[5px]">
       <Link href="" className="flex items-center">
         <Logo />
       </Link>
-      <nav className="flex items-center gap-[60px]">
+      <nav className="flex items-center gap-14">
         <Link href="" className="text-body1 text-main-yellow-950">
           기관 소개
         </Link>
