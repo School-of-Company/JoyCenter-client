@@ -1,13 +1,11 @@
-import Header from '@/widgets/header/ui';
-import CardImageIcon from '@/shared/assets/icons/CardImage';
-import PlayBtnIcon from '@/shared/assets/icons/PlayBtn';
-import FolderIcon from '@/shared/assets/icons/Folder';
+import CardImageIcon from '@/shared/assets/svg/CardImage';
+import PlayBtnIcon from '@/shared/assets/svg/PlayBtn';
+import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 
 export default function HomebasePage() {
   return (
     <>
-      <Header />
       <div className="mt-9 flex justify-center">
         <div className="w-225 p-3">
           <div className="text-body5 flex items-center gap-2 text-gray-900">

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import SortDropDown from '@/shared/ui/SortDropDown';
 import PostPreview from '@/shared/ui/PostPreview';
 import Arrow from '@/shared/assets/svg/Arrow';
-import Header from '@/widgets/header/ui';
 
 const postData = [
   { id: 1, member: '작성자', title: '사진제목', date: '2025-01-01' },
@@ -20,7 +19,6 @@ export default function Post() {
 
   return (
     <>
-      <Header />
       <div className="flex justify-center">
         <div className="flex w-286 flex-col gap-7">
           <div className="mt-20 flex items-end justify-between self-stretch">
