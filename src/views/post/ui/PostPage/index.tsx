@@ -32,7 +32,7 @@ export default function Post() {
                 member={post.member}
                 title={post.title}
                 date={post.date}
-                onClick={() => router.push(`/post-detail/${post.id}`)}
+                onClick={() => router.push(`/postDetail/${post.id}`)}
               />
             ))}
           </div>
