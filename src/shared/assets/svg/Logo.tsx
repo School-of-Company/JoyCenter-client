@@ -1,8 +1,10 @@
-export default function Logo() {
+import { SVGProps } from '@/shared/types/svgPropsType';
+
+export default function Logo({ width = 132, height = 57 }: SVGProps) {
   return (
     <svg
-      width="132"
-      height="57"
+      width={width}
+      height={height}
       viewBox="0 0 132 57"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
