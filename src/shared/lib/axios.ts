@@ -106,7 +106,7 @@ instance.interceptors.response.use(
         null,
         {
           headers: {
-            refreshtoken: refreshToken,
+            refreshtoken: 'Bearer ' + refreshToken,
           },
         },
       );
