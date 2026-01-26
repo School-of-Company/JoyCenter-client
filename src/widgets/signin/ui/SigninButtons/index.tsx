@@ -13,11 +13,14 @@ export default function SigninButtons() {
         구글로 로그인
         <div className="size-8" />
       </Link>
-      <button className="text-body1 flex w-full items-center justify-around rounded-xl bg-[#FEE500] px-4 py-3">
+      <Link
+        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&scope=account_email&prompt=login`}
+        className="text-body1 flex w-full items-center justify-around rounded-xl bg-[#FEE500] px-4 py-3"
+      >
         <Kakao />
         카카오로 로그인
         <div className="size-8" />
-      </button>
+      </Link>
     </>
   );
 }
