@@ -89,8 +89,7 @@ const nextConfig: NextConfig = {
     return [
       { source: '/(.*)', headers: securityHeaders },
       {
-        source:
-          '/:path*\\.(?:js|css|map|png|jpg|jpeg|gif|webp|avif|svg|ico|woff|woff2|ttf|otf)',
+        source: '/_next/static/:path*',
         headers: [
           {
             key: 'Cache-Control',
