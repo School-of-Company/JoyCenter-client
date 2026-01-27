@@ -5,7 +5,7 @@ import { QueryProvider } from '@/shared/lib/QueryProvider';
 import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
-  title: '더기쁨 노인복지센터',
+  title: '더기쁨노인복지센터',
   description: '더 기쁘게, 더 따뜻하게 더기쁨 노인복지센터',
 };
 
