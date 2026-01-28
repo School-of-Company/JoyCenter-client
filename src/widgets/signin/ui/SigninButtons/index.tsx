@@ -14,7 +14,7 @@ export default function SigninButtons() {
         <div className="size-8" />
       </Link>
       <Link
-        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&scope=account_email&prompt=login`}
+        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&scope=account_email&prompt=login`}
         className="text-body1 flex w-full items-center justify-around rounded-xl bg-[#FEE500] px-4 py-3"
       >
         <Kakao />

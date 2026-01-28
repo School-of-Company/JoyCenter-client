@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://joy-center-client.vercel.app
+
+# Sitemaps
+Sitemap: https://joy-center-client.vercel.app/sitemap.xml
