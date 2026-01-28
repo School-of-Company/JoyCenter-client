@@ -1,6 +1,11 @@
+import { Section } from '@jump-section/react';
+
 export default function IntroduceSection() {
   return (
-    <section className="relative flex h-[800px] flex-col items-center justify-center gap-10 overflow-hidden px-4 py-40 text-center">
+    <Section
+      id="introduce"
+      className="relative flex h-[800px] flex-col items-center justify-center gap-10 overflow-hidden px-4 py-40 text-center"
+    >
       <div className="pointer-events-none absolute top-1/2 left-1/2 -z-10 h-[400px] w-[50%] -translate-x-1/2 -translate-y-1/2 rounded-[1196px] bg-[rgba(243,211,114,0.40)] blur-[150px]" />
       <h2 className="text-h1">더기쁨노인복지센터 소개</h2>
       <div className="h-px w-10 bg-gray-500" />
@@ -24,6 +29,6 @@ export default function IntroduceSection() {
           가 되겠습니다.
         </p>
       </div>
-    </section>
+    </Section>
   );
 }
