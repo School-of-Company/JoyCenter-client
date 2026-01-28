@@ -1,12 +1,14 @@
 'use client';
 
 import Logo from '@/shared/assets/svg/Logo';
+import { useScrollSection } from '@jump-section/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const pathname = usePathname();
   const isMain = pathname === '/main';
+  const { scrollTo } = useScrollSection();
 
   return (
     <header
@@ -20,9 +22,18 @@ export default function Header() {
         <Logo />
       </Link>
       <nav className="flex items-center gap-14">
-        <Link href="" className="text-body1">
+        <div
+          onClick={() => scrollTo('introduce')}
+          className="text-body1 cursor-pointer"
+        >
           기관 소개
-        </Link>
+        </div>
+        <div
+          onClick={() => scrollTo('information')}
+          className="text-body1 cursor-pointer"
+        >
+          기관 정보
+        </div>
         <Link href="/post" className="text-body1">
           게시판
         </Link>
