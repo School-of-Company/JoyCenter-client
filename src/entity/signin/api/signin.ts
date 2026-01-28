@@ -1,6 +1,6 @@
 import { instance } from '@/shared/lib/axios';
 
-export const signin = async (code: string) => {
-  const res = await instance.post('/auth', { code });
+export const signin = async (code: string, provider: string) => {
+  const res = await instance.post('/auth', { code, provider });
   if (res.data) return res.data;
 };

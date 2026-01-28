@@ -14,11 +14,11 @@ export interface OAuthResponse {
 
 export const useSignin = () => {
   const router = useRouter();
-  return useMutation({
-    mutationFn: (code: string) => signin(code),
+  return useMutation<OAuthResponse, Error, { code: string; provider: string }>({
+    mutationFn: ({ code, provider }) => signin(code, provider),
     onSuccess: (data: OAuthResponse) => {
-      const accessToken = data?.accessToken ?? data?.accessToken;
-      const refreshToken = data?.refreshToken ?? data?.refreshToken;
+      const accessToken = data?.accessToken;
+      const refreshToken = data?.refreshToken;
 
       if (accessToken) localStorage.setItem('accessToken', accessToken);
       if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
