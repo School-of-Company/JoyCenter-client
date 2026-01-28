@@ -3,6 +3,7 @@ import './globals.css';
 import Header from '@/shared/ui/Header';
 import { QueryProvider } from '@/shared/lib/QueryProvider';
 import { Toaster } from 'sonner';
+import { ScrollSectionProvider } from '@jump-section/react';
 
 export const metadata: Metadata = {
   title: {
@@ -32,11 +33,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <QueryProvider>
-          <Header />
-          {children}
-          <Toaster richColors />
-        </QueryProvider>
+        <ScrollSectionProvider>
+          <QueryProvider>
+            <Header />
+            {children}
+            <Toaster richColors />
+          </QueryProvider>
+        </ScrollSectionProvider>
       </body>
     </html>
   );
