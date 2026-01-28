@@ -4,13 +4,13 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const cspDev = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http://t1.daumcdn.net http://dapi.kakao.com",
   "style-src 'self' 'unsafe-inline' https:",
-  "img-src 'self' https: data: blob:",
+  "img-src 'self' https: data: blob: http://t1.daumcdn.net http://dapi.kakao.com http://mts.daumcdn.net",
   "font-src 'self' https: data:",
-  "connect-src 'self' https: ws: wss:",
+  "connect-src 'self' https: http://dapi.kakao.com ws: wss:",
   "media-src 'self' https: data: blob:",
-  "frame-src 'self' https:",
+  "frame-src 'self' https: http://t1.daumcdn.net http://dapi.kakao.com",
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
