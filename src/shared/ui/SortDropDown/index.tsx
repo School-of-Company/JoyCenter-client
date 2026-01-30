@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Arrow from '@/shared/assets/svg/Arrow';
-import { SortType } from '@/entity/post/api/post';
+import { SortType } from '@/shared/types/post';
 
 type SortOption = '최신순' | '오래된순';
 
