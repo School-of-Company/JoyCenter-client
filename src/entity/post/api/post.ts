@@ -1,6 +1,7 @@
 import { instance } from '@/shared/lib/axios';
+import type { SortType } from '@/shared/types/post';
 
-export type SortType = 'CREATED_AT_DESC' | 'CREATED_AT_ASC';
+export type { SortType };
 
 export interface PostThumbnail {
   attachmentsId: number;
