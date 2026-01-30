@@ -6,7 +6,7 @@ import SortDropDown from '@/shared/ui/SortDropDown';
 import PostPreview from '@/shared/ui/PostPreview';
 import Arrow from '@/shared/assets/svg/Arrow';
 import { usePostList } from '@/entity/post/model/usePostList';
-import { SortType } from '@/entity/post/api/post';
+import { SortType } from '@/shared/types/post';
 
 export default function PostPageView() {
   const router = useRouter();
