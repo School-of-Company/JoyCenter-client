@@ -2,16 +2,27 @@
 
 import { useState } from 'react';
 import Arrow from '@/shared/assets/svg/Arrow';
+import { SortType } from '@/entity/post/api/post';
 
 type SortOption = '최신순' | '오래된순';
 
-export default function SortDropDown() {
+interface SortDropDownProps {
+  onSortChange?: (sort: SortType) => void;
+}
+
+export default function SortDropDown({ onSortChange }: SortDropDownProps) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<SortOption>('최신순');
 
   const handleSelect = (option: SortOption) => {
     setSelected(option);
     setOpen(false);
+
+    if (onSortChange) {
+      const sortType: SortType =
+        option === '최신순' ? 'CREATED_AT_DESC' : 'CREATED_AT_ASC';
+      onSortChange(sortType);
+    }
   };
 
   return (
