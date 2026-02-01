@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SortDropDown from '@/shared/ui/SortDropDown';
 import PostPreview from '@/shared/ui/PostPreview';
+import PostPreviewLoad from '@/shared/ui/PostPreview/Load';
 import Arrow from '@/shared/assets/svg/Arrow';
 import { usePostList } from '@/entity/post/model/usePostList';
 import { SortType } from '@/shared/types/post';
@@ -13,7 +14,7 @@ export default function PostPageView() {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortType, setSortType] = useState<SortType>('CREATED_AT_DESC');
 
-  const { data, error } = usePostList({
+  const { data, isLoading, error } = usePostList({
     sort: sortType,
     page: currentPage,
     size: 6,
@@ -46,7 +47,13 @@ export default function PostPageView() {
           <SortDropDown onSortChange={setSortType} />
         </div>
 
-        {error ? (
+        {isLoading ? (
+          <div className="grid grid-cols-3 gap-x-6 gap-y-12">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <PostPreviewLoad key={index} />
+            ))}
+          </div>
+        ) : error ? (
           <div className="flex h-96 items-center justify-center">
             <p className="text-body1 text-red-500">
               게시글을 불러오는데 실패했습니다.
