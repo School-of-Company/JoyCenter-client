@@ -16,6 +16,7 @@ export interface PostMember {
 export interface Post {
   id: number;
   title: string;
+  createdAt: string;
   member: PostMember;
   thumbnail: PostThumbnail | null;
 }
