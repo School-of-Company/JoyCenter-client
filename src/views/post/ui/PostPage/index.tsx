@@ -76,23 +76,25 @@ export default function PostPageView() {
                 />
               ))}
             </div>
-            <div className="mt-8 flex items-center justify-center gap-5">
-              <button
-                onClick={handlePrevPage}
-                disabled={!pageInfo?.hasPrevious}
-                className="cursor-pointer"
-              >
-                <Arrow direction="left" color="black" />
-              </button>
-              <p className="text-body1">{pageInfo ? pageInfo.number + 1 : 1}</p>
-              <button
-                onClick={handleNextPage}
-                disabled={!pageInfo?.hasNext}
-                className="cursor-pointer"
-              >
-                <Arrow direction="right" color="black" />
-              </button>
-            </div>
+            {pageInfo && (
+              <div className="mt-8 flex items-center justify-center gap-5">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={!pageInfo?.hasPrevious}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="left" color="black" />
+                </button>
+                <p className="text-body1">{pageInfo.number + 1}</p>
+                <button
+                  onClick={handleNextPage}
+                  disabled={!pageInfo?.hasNext}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="right" color="black" />
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>
