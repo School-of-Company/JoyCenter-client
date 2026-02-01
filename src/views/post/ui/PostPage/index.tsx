@@ -13,7 +13,7 @@ export default function PostPageView() {
   const [currentPage, setCurrentPage] = useState(0);
   const [sortType, setSortType] = useState<SortType>('CREATED_AT_DESC');
 
-  const { data, isLoading, error } = usePostList({
+  const { data, error } = usePostList({
     sort: sortType,
     page: currentPage,
     size: 6,
@@ -46,11 +46,7 @@ export default function PostPageView() {
           <SortDropDown onSortChange={setSortType} />
         </div>
 
-        {isLoading ? (
-          <div className="flex h-96 items-center justify-center">
-            <p className="text-body1 text-gray-500">로딩 중...</p>
-          </div>
-        ) : error ? (
+        {error ? (
           <div className="flex h-96 items-center justify-center">
             <p className="text-body1 text-red-500">
               게시글을 불러오는데 실패했습니다.
@@ -68,7 +64,7 @@ export default function PostPageView() {
                   key={post.id}
                   member={post.member.email}
                   title={post.title}
-                  date={new Date().toISOString().split('T')[0]}
+                  date={post.createdAt.split('T')[0]}
                   onClick={() => handlePostClick(post.id)}
                 />
               ))}
@@ -77,7 +73,7 @@ export default function PostPageView() {
               <button
                 onClick={handlePrevPage}
                 disabled={!pageInfo?.hasPrevious}
-                className={!pageInfo?.hasPrevious ? 'opacity-30' : ''}
+                className="cursor-pointer"
               >
                 <Arrow direction="left" color="black" />
               </button>
@@ -85,7 +81,7 @@ export default function PostPageView() {
               <button
                 onClick={handleNextPage}
                 disabled={!pageInfo?.hasNext}
-                className={!pageInfo?.hasNext ? 'opacity-30' : ''}
+                className="cursor-pointer"
               >
                 <Arrow direction="right" color="black" />
               </button>
