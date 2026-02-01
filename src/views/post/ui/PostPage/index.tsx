@@ -16,7 +16,7 @@ export default function PostPageView() {
   const { data, isLoading, error } = usePostList({
     sort: sortType,
     page: currentPage,
-    size: 9,
+    size: 6,
   });
 
   const handlePrevPage = () => {
