@@ -37,39 +37,6 @@ export default function PostPageView() {
 
   const posts = data?.content || [];
   const pageInfo = data?.page;
-  if (isLoading) {
-    return (
-      <div className="flex justify-center">
-        <div className="flex w-286 flex-col gap-7">
-          <div className="mt-20 flex items-end justify-between self-stretch">
-            <h1 className="text-h1 text-gray-900">게시판</h1>
-            <SortDropDown onSortChange={setSortType} />
-          </div>
-          <div className="flex h-96 items-center justify-center">
-            <p className="text-body1 text-gray-500">로딩 중...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center">
-        <div className="flex w-286 flex-col gap-7">
-          <div className="mt-20 flex items-end justify-between self-stretch">
-            <h1 className="text-h1 text-gray-900">게시판</h1>
-            <SortDropDown onSortChange={setSortType} />
-          </div>
-          <div className="flex h-96 items-center justify-center">
-            <p className="text-body1 text-red-500">
-              게시글을 불러오는데 실패했습니다.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex justify-center">
@@ -78,7 +45,18 @@ export default function PostPageView() {
           <h1 className="text-h1 text-gray-900">게시판</h1>
           <SortDropDown onSortChange={setSortType} />
         </div>
-        {posts.length === 0 ? (
+
+        {isLoading ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-gray-500">로딩 중...</p>
+          </div>
+        ) : error ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-red-500">
+              게시글을 불러오는데 실패했습니다.
+            </p>
+          </div>
+        ) : posts.length === 0 ? (
           <div className="flex h-96 items-center justify-center">
             <p className="text-body1 text-gray-500">게시글이 없습니다.</p>
           </div>
