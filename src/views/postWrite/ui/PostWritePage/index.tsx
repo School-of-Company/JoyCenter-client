@@ -1,9 +1,19 @@
+"use client";
+import React, { useRef, useState } from 'react';
 import CardImageIcon from '@/shared/assets/svg/CardImage';
 import PlayBtnIcon from '@/shared/assets/svg/PlayBtn';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 
 export default function HomebasePage() {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [files, setFiles] = useState<string[]>([]);
+
+    const openFile = () => fileRef.current?.click();
+    const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFiles(e.target.files ? Array.from(e.target.files).map((f: File) => f.name) : []);
+  };
+
   return (
     <>
       <div className="mt-9 flex justify-center">
@@ -22,19 +32,27 @@ export default function HomebasePage() {
           </div>
           <div className="mt-3 p-2">
             <div className="text-body4 flex justify-end gap-6 text-gray-400">
-              <button className="flex items-center gap-2">
+              <button type="button" className="flex items-center gap-2" onClick={openFile}>
                 <CardImageIcon />
                 <span>사진 추가</span>
               </button>
-              <button className="flex items-center gap-2">
+              <button type="button" className="flex items-center gap-2" onClick={openFile}>
                 <PlayBtnIcon />
                 <span>동영상 추가</span>
               </button>
-              <button className="flex items-center gap-2">
+              <button type="button" className="flex items-center gap-2" onClick={openFile}>
                 <FolderIcon />
                 <span>파일 추가</span>
               </button>
+              <input type="file" multiple ref={fileRef} style={{ display: 'none' }} onChange={onFile} />
             </div>
+            {files.length > 0 && (
+              <div className="mt-2 text-body5 text-gray-700 flex flex-wrap gap-2">
+                {files.map((name, i) => (
+                  <span key={i} className="bg-gray-100 px-2 py-1 rounded">{name}</span>
+                ))}
+              </div>
+            )}
           </div>
           <textarea
             placeholder="글을 작성하세요"
