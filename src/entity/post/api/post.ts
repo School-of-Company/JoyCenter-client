@@ -1,5 +1,6 @@
 import { instance } from '@/shared/lib/axios';
 import type { SortType } from '@/shared/types/post';
+import type { PageResponse } from '@/shared/types/page';
 
 export type { SortType };
 
@@ -21,17 +22,7 @@ export interface Post {
   thumbnail: PostThumbnail | null;
 }
 
-export interface PostListResponse {
-  content: Post[];
-  page: {
-    number: number;
-    size: number;
-    totalElements: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrevious: boolean;
-  };
-}
+export type PostListResponse = PageResponse<Post>;
 
 export interface GetPostsParams {
   sort?: SortType;
