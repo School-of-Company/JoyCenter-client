@@ -35,12 +35,12 @@ export default function PostPreview({
         )}
       </div>
 
-      <div className="flex items-center justify-between px-1">
-        <div className="flex flex-col gap-1">
-          <span className="text-body4 text-gray-500">{member}</span>
+      <div className="flex flex-col gap-2 px-1">
+        <span className="text-body4 text-gray-500">{member}</span>
+        <div className="flex items-center justify-between gap-2">
           <span className="text-h5 text-gray-900">{title}</span>
+          <span className="text-body5 text-gray-500">{date}</span>
         </div>
-        <span className="text-body5 text-gray-500">{date}</span>
       </div>
     </div>
   );
