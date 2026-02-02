@@ -1,34 +1,11 @@
 import { instance } from '@/shared/lib/axios';
-import type { SortType } from '@/shared/types/post';
-import type { PageResponse } from '@/shared/types/page';
+import type {
+  GetPostsParams,
+  PostListResponse,
+  SortType,
+} from '../model/types';
 
 export type { SortType };
-
-export interface PostThumbnail {
-  attachmentsId: number;
-  url: string;
-}
-
-export interface PostMember {
-  memberId: number;
-  email: string;
-}
-
-export interface Post {
-  id: number;
-  title: string;
-  createdAt: string;
-  member: PostMember;
-  thumbnail: PostThumbnail | null;
-}
-
-export type PostListResponse = PageResponse<Post>;
-
-export interface GetPostsParams {
-  sort?: SortType;
-  page?: number;
-  size?: number;
-}
 
 export const getPosts = async (
   params: GetPostsParams = {},
