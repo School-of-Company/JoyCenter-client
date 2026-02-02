@@ -1,18 +1,25 @@
 'use client';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 
 export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [files, setFiles] = useState<string[]>([]);
+  const [previews, setPreviews] = useState<{ name: string; url: string }[]>([]);
 
   const openFile = () => fileRef.current?.click();
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFiles(
-      e.target.files ? Array.from(e.target.files).map((f: File) => f.name) : [],
-    );
+    previews.forEach((p) => URL.revokeObjectURL(p.url));
+    const files = e.target.files ? Array.from(e.target.files) : [];
+    const newPreviews = files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) }));
+    setPreviews(newPreviews);
   };
+
+  useEffect(() => {
+    return () => {
+      previews.forEach((p) => URL.revokeObjectURL(p.url));
+    };
+  }, [previews]);
 
   return (
     <>
@@ -30,8 +37,8 @@ export default function PostWritePage() {
             />
             <hr className="mt-2 border-gray-600" />
           </div>
-          <div className="mt-3 p-2">
-            <div className="text-body4 flex justify-end gap-6 text-gray-400">
+          <div className="mt-3">
+            <div className="p-2 text-body4 flex justify-end gap-6 text-gray-400">
               <button
                 type="button"
                 className="flex items-center gap-2"
@@ -48,12 +55,15 @@ export default function PostWritePage() {
                 onChange={onFile}
               />
             </div>
-            {files.length > 0 && (
-              <div className="text-body5 mt-2 flex flex-wrap gap-2 text-gray-700">
-                {files.map((name, i) => (
-                  <span key={i} className="rounded bg-gray-100 px-2 py-1">
-                    {name}
-                  </span>
+            {previews.length > 0 && (
+              <div className="mt-2">
+                {previews.map((p, i) => (
+                  <img
+                    key={i}
+                    src={p.url}
+                    alt={p.name}
+                    className="w-full rounded-2xl object-cover mb-2 min-h-125 border border-gray-100"
+                  />
                 ))}
               </div>
             )}
