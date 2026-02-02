@@ -69,6 +69,7 @@ export default function PostPageView() {
               {posts.map((post) => (
                 <PostPreview
                   key={post.id}
+                  imageUrl={post.thumbnail?.url}
                   member={post.member.email}
                   title={post.title}
                   date={post.createdAt.split('T')[0]}
