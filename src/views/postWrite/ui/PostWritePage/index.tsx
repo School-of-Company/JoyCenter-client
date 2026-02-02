@@ -1,11 +1,9 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import CardImageIcon from '@/shared/assets/svg/CardImage';
-import PlayBtnIcon from '@/shared/assets/svg/PlayBtn';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 
-export default function HomebasePage() {
+export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<string[]>([]);
 
@@ -32,14 +30,6 @@ export default function HomebasePage() {
           </div>
           <div className="mt-3 p-2">
             <div className="text-body4 flex justify-end gap-6 text-gray-400">
-              <button type="button" className="flex items-center gap-2" onClick={openFile}>
-                <CardImageIcon />
-                <span>사진 추가</span>
-              </button>
-              <button type="button" className="flex items-center gap-2" onClick={openFile}>
-                <PlayBtnIcon />
-                <span>동영상 추가</span>
-              </button>
               <button type="button" className="flex items-center gap-2" onClick={openFile}>
                 <FolderIcon />
                 <span>파일 추가</span>
