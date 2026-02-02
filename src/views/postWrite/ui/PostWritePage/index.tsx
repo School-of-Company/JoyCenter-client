@@ -14,7 +14,10 @@ export default function PostWritePage() {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length === 0) return;
 
-    const newPreviews = files.map((f: File) => ({ name: f.name, url: URL.createObjectURL(f) }));
+    const newPreviews = files.map((f: File) => ({
+      name: f.name,
+      url: URL.createObjectURL(f),
+    }));
     const prevLen = previews.length;
     setPreviews((prev) => [...prev, ...newPreviews]);
     setCurrent(prevLen);
@@ -23,7 +26,9 @@ export default function PostWritePage() {
   };
 
   const prev = () => {
-    setCurrent((c) => (previews.length ? (c - 1 + previews.length) % previews.length : 0));
+    setCurrent((c) =>
+      previews.length ? (c - 1 + previews.length) % previews.length : 0,
+    );
   };
 
   const next = () => {
@@ -71,32 +76,58 @@ export default function PostWritePage() {
             <hr className="mt-2 border-gray-600" />
           </div>
           <div className="mt-3">
-            <div className="p-2 text-body4 flex justify-end gap-6 text-gray-400">
-              <button
-                type="button"
-                className="flex items-center gap-2"
-                onClick={openFile}
-              >
-                <FolderIcon />
-                <span>파일 추가</span>
-              </button>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                ref={fileRef}
-                style={{ display: 'none' }}
-                onChange={onFile}
-              />
+            <div className="text-body4 relative flex justify-end gap-6 p-2 text-gray-400">
+              {previews.length > 0 && (
+                <div className="mr-2 flex items-center">
+                  <button
+                    type="button"
+                    className="underline-none"
+                    onClick={() => {
+                      setPreviews((prev) => {
+                        if (!prev[current]) return prev;
+                        URL.revokeObjectURL(prev[current].url);
+                        const nextArr = prev.filter(
+                          (_, idx) => idx !== current,
+                        );
+                        if (nextArr.length === 0) setCurrent(0);
+                        else if (current >= nextArr.length)
+                          setCurrent(nextArr.length - 1);
+                        return nextArr;
+                      });
+                    }}
+                  >
+                    파일 제거
+                  </button>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  className="flex items-center gap-2"
+                  onClick={openFile}
+                >
+                  <FolderIcon />
+                  <span>파일 추가</span>
+                </button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={fileRef}
+                  style={{ display: 'none' }}
+                  onChange={onFile}
+                />
+              </div>
             </div>
             {previews.length > 0 && (
-              <div className="mt-2 relative">
+              <div className="relative mt-2">
                 <div className="overflow-hidden rounded-2xl border border-gray-100">
                   <img
                     key={current}
                     src={previews[current].url}
                     alt={previews[current].name}
-                    className="block w-[calc(100%+24px)] -mx-3 object-cover mb-2 min-h-125 h-auto"
+                    className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
                     onTouchStart={handleTouchStart}
                     onTouchEnd={handleTouchEnd}
                   />
@@ -108,7 +139,7 @@ export default function PostWritePage() {
                       type="button"
                       onClick={prev}
                       aria-label="이전 이미지"
-                      className="absolute -left-10 top-1/2 -translate-y-1/2 p-3 rotate-180"
+                      className="absolute top-1/2 -left-10 -translate-y-1/2 rotate-180 p-3"
                     >
                       <ArrowFilled />
                     </button>
@@ -116,14 +147,12 @@ export default function PostWritePage() {
                       type="button"
                       onClick={next}
                       aria-label="다음 이미지"
-                      className="absolute -right-10 top-1/2 -translate-y-1/2 p-3"
+                      className="absolute top-1/2 -right-10 -translate-y-1/2 p-3"
                     >
                       <ArrowFilled />
                     </button>
-
                   </>
                 )}
-
               </div>
             )}
           </div>
