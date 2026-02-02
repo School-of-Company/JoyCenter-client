@@ -1,9 +1,11 @@
 'use client';
 import React, { useRef, useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import { instance } from '@/shared/lib/axios';
+import { AUTH_TOKEN_KEY, getCookie } from '@/shared/lib/cookie';
 
 export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -16,6 +18,10 @@ export default function PostWritePage() {
     }[]
   >([]);
   const [current, setCurrent] = useState<number>(0);
+  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const openFile = () => fileRef.current?.click();
   const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,9 +44,12 @@ export default function PostWritePage() {
       try {
         const fd = new FormData();
         fd.append('file', file);
-        const res = await instance.post('/api/attachments', fd, {
+        console.debug('upload token', getCookie(AUTH_TOKEN_KEY));
+        console.debug('upload request URL', `${instance.defaults.baseURL}/attachments?attachmentsType=IMAGE&imageOrder=${order}`);
+        const res = await instance.post('/attachments', fd, {
           params: { attachmentsType: 'IMAGE', imageOrder: order },
           headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true,
         });
         const data = res.data;
         setPreviews((prev) => {
@@ -60,7 +69,13 @@ export default function PostWritePage() {
           return newArr;
         });
       } catch (err) {
-        console.error('첨부파일 업로드 실패', err);
+        const e = err as any;
+        console.error('업로드 실패', {
+          status: e?.response?.status,
+          data: e?.response?.data,
+          token: getCookie(AUTH_TOKEN_KEY),
+          err: e,
+        });
         setPreviews((prev) => {
           const newArr = [...prev];
           const targetIdx = prevLen + idx;
@@ -106,6 +121,61 @@ export default function PostWritePage() {
     };
   }, []);
 
+  const hasUploading = previews.some((p) => p.uploading);
+
+  const submitPost = async () => {
+    if (!title.trim()) {
+      alert('제목을 입력하세요');
+      return;
+    }
+
+    if (hasUploading) {
+      alert('파일 업로드가 완료될 때까지 기다려주세요');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const blocks: {
+        order: number;
+        blockType: 'TEXT' | 'ATTACHMENT';
+        text?: string;
+        attachmentId?: number;
+      }[] = [];
+
+      let order = 0;
+
+      if (content.trim()) {
+        blocks.push({
+          order: order++,
+          blockType: 'TEXT',
+          text: content,
+        });
+      }
+
+      const attachments = previews.filter((p) => p.attachmentsId);
+      attachments.forEach((p) => {
+        blocks.push({
+          order: order++,
+          blockType: 'ATTACHMENT',
+          attachmentId: p.attachmentsId!,
+        });
+      });
+
+      const res = await instance.post('/post', { title, blocks });
+      if (res.status === 201) {
+        router.push('/main');
+      } else {
+        alert('게시 실패');
+      }
+    } catch (err) {
+      console.error('게시 실패', err);
+      alert('게시 실패');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="mt-9 flex justify-center">
@@ -119,6 +189,8 @@ export default function PostWritePage() {
               type="text"
               placeholder="제목을 입력하세요"
               className="text-h2 w-full p-3 pb-1 placeholder-gray-300 focus:outline-none"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
             <hr className="mt-2 border-gray-600" />
           </div>
@@ -147,7 +219,8 @@ export default function PostWritePage() {
                       if (target.attachmentsId) {
                         try {
                           await instance.delete(
-                            `/api/attachments/${target.attachmentsId}`,
+                            `/attachments/${target.attachmentsId}`,
+                            { withCredentials: true },
                           );
                         } catch (err) {
                           console.error('첨부파일 삭제 실패', err);
@@ -176,7 +249,7 @@ export default function PostWritePage() {
                 </button>
                 <input
                   type="file"
-                  accept="image/*"
+                  // accept="image/*"
                   multiple
                   ref={fileRef}
                   style={{ display: 'none' }}
@@ -223,14 +296,25 @@ export default function PostWritePage() {
           <textarea
             placeholder="글을 작성하세요"
             className="text-body3 mt-2 min-h-125 w-full resize-none rounded-2xl border border-gray-100 p-5 placeholder-gray-400 focus:outline-none"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
           <div className="mt-3">
             <div className="flex justify-end gap-4 p-1 pr-2">
-              <button className="border-main-yellow-800 text-body3 rounded-lg border px-8 py-2 text-gray-900">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="border-main-yellow-800 text-body3 rounded-lg border px-8 py-2 text-gray-900"
+              >
                 취소
               </button>
-              <button className="bg-main-yellow-100 border-main-yellow-400 text-body3 rounded-lg border px-8 py-2 text-gray-900">
-                게시
+              <button
+                type="button"
+                className="bg-main-yellow-100 border-main-yellow-400 text-body3 rounded-lg border px-8 py-2 text-gray-900"
+                onClick={submitPost}
+                disabled={isSubmitting || hasUploading}
+              >
+                {isSubmitting ? '게시 중...' : hasUploading ? '업로드 중...' : '게시'}
               </button>
             </div>
           </div>
