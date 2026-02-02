@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
+      <body suppressHydrationWarning>
         <ScrollSectionProvider>
           <QueryProvider>
             <Header />
