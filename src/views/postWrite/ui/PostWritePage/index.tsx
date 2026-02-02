@@ -3,10 +3,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
+import { instance } from '@/shared/lib/axios';
 
 export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [previews, setPreviews] = useState<{ name: string; url: string }[]>([]);
+  const [previews, setPreviews] = useState<
+    {
+      name: string;
+      url: string;
+      attachmentsId?: number;
+      uploading?: boolean;
+    }[]
+  >([]);
   const [current, setCurrent] = useState<number>(0);
 
   const openFile = () => fileRef.current?.click();
@@ -17,12 +25,51 @@ export default function PostWritePage() {
     const newPreviews = files.map((f: File) => ({
       name: f.name,
       url: URL.createObjectURL(f),
+      uploading: true,
     }));
     const prevLen = previews.length;
     setPreviews((prev) => [...prev, ...newPreviews]);
     setCurrent(prevLen);
 
     if (fileRef.current) fileRef.current.value = '';
+
+    files.forEach(async (file, idx) => {
+      const order = prevLen + idx + 1;
+      try {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await instance.post('/api/attachments', fd, {
+          params: { attachmentsType: 'IMAGE', imageOrder: order },
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        const data = res.data;
+        setPreviews((prev) => {
+          const newArr = [...prev];
+          const targetIdx = prevLen + idx;
+          if (!newArr[targetIdx]) return prev;
+          const oldUrl = newArr[targetIdx].url;
+          try {
+            URL.revokeObjectURL(oldUrl);
+          } catch (e) {}
+          newArr[targetIdx] = {
+            ...newArr[targetIdx],
+            url: data.url,
+            attachmentsId: data.attachmentsId,
+            uploading: false,
+          };
+          return newArr;
+        });
+      } catch (err) {
+        console.error('첨부파일 업로드 실패', err);
+        setPreviews((prev) => {
+          const newArr = [...prev];
+          const targetIdx = prevLen + idx;
+          if (!newArr[targetIdx]) return prev;
+          newArr[targetIdx] = { ...newArr[targetIdx], uploading: false };
+          return newArr;
+        });
+      }
+    });
   };
 
   const prev = () => {
@@ -82,10 +129,10 @@ export default function PostWritePage() {
                   <button
                     type="button"
                     className="underline-none"
-                    onClick={() => {
+                    onClick={async () => {
+                      const target = previews[current];
                       setPreviews((prev) => {
                         if (!prev[current]) return prev;
-                        URL.revokeObjectURL(prev[current].url);
                         const nextArr = prev.filter(
                           (_, idx) => idx !== current,
                         );
@@ -94,6 +141,23 @@ export default function PostWritePage() {
                           setCurrent(nextArr.length - 1);
                         return nextArr;
                       });
+
+                      if (!target) return;
+
+                      if (target.attachmentsId) {
+                        try {
+                          await instance.delete(
+                            `/api/attachments/${target.attachmentsId}`,
+                          );
+                        } catch (err) {
+                          console.error('첨부파일 삭제 실패', err);
+                        }
+                      } else {
+                        try {
+                          URL.revokeObjectURL(target.url);
+                        } catch (e) {
+                        }
+                      }
                     }}
                   >
                     파일 제거
