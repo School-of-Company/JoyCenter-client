@@ -13,6 +13,7 @@ export default function PostWritePage() {
     {
       name: string;
       url: string;
+      kind: 'IMAGE' | 'VIDEO';
       attachmentsId?: number;
       uploading?: boolean;
     }[]
@@ -28,11 +29,19 @@ export default function PostWritePage() {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length === 0) return;
 
-    const newPreviews = files.map((f: File) => ({
-      name: f.name,
-      url: URL.createObjectURL(f),
-      uploading: true,
-    }));
+    const newPreviews = files.map((f: File) => {
+      const kind: 'IMAGE' | 'VIDEO' = f.type.startsWith('video/')
+        ? 'VIDEO'
+        : 'IMAGE';
+
+      return {
+        name: f.name,
+        url: URL.createObjectURL(f),
+        kind,
+        uploading: true,
+      };
+    });
+
     const prevLen = previews.length;
     setPreviews((prev) => [...prev, ...newPreviews]);
     setCurrent(prevLen);
@@ -41,25 +50,35 @@ export default function PostWritePage() {
 
     files.forEach(async (file, idx) => {
       const order = prevLen + idx + 1;
+
+      const attachmentsType: 'IMAGE' | 'VIDEO' = file.type.startsWith('video/')
+        ? 'VIDEO'
+        : 'IMAGE';
+
       try {
         const fd = new FormData();
         fd.append('file', file);
-        console.debug('upload token', getCookie(AUTH_TOKEN_KEY));
-        console.debug('upload request URL', `${instance.defaults.baseURL}/attachments?attachmentsType=IMAGE&imageOrder=${order}`);
+
         const res = await instance.post('/attachments', fd, {
-          params: { attachmentsType: 'IMAGE', imageOrder: order },
+          params: { attachmentsType, imageOrder: order },
           headers: { 'Content-Type': 'multipart/form-data' },
           withCredentials: true,
         });
+
         const data = res.data;
+
         setPreviews((prev) => {
           const newArr = [...prev];
           const targetIdx = prevLen + idx;
           if (!newArr[targetIdx]) return prev;
+
           const oldUrl = newArr[targetIdx].url;
-          try {
-            URL.revokeObjectURL(oldUrl);
-          } catch (e) {}
+          if (oldUrl.startsWith('blob:')) {
+            try {
+              URL.revokeObjectURL(oldUrl);
+            } catch {}
+          }
+
           newArr[targetIdx] = {
             ...newArr[targetIdx],
             url: data.url,
@@ -76,6 +95,7 @@ export default function PostWritePage() {
           token: getCookie(AUTH_TOKEN_KEY),
           err: e,
         });
+
         setPreviews((prev) => {
           const newArr = [...prev];
           const targetIdx = prevLen + idx;
@@ -117,7 +137,13 @@ export default function PostWritePage() {
 
   useEffect(() => {
     return () => {
-      previewsRef.current.forEach((p) => URL.revokeObjectURL(p.url));
+      previewsRef.current.forEach((p) => {
+        if (p.url.startsWith('blob:')) {
+          try {
+            URL.revokeObjectURL(p.url);
+          } catch {}
+        }
+      });
     };
   }, []);
 
@@ -228,8 +254,7 @@ export default function PostWritePage() {
                       } else {
                         try {
                           URL.revokeObjectURL(target.url);
-                        } catch (e) {
-                        }
+                        } catch (e) {}
                       }
                     }}
                   >
@@ -249,7 +274,7 @@ export default function PostWritePage() {
                 </button>
                 <input
                   type="file"
-                  // accept="image/*"
+                  accept="image/*, video/*"
                   multiple
                   ref={fileRef}
                   style={{ display: 'none' }}
@@ -260,14 +285,25 @@ export default function PostWritePage() {
             {previews.length > 0 && (
               <div className="relative mt-2">
                 <div className="overflow-hidden rounded-2xl border border-gray-100">
-                  <img
-                    key={current}
-                    src={previews[current].url}
-                    alt={previews[current].name}
-                    className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                  />
+                  {previews[current].kind === 'VIDEO' ? (
+                    <video
+                      key={current}
+                      src={previews[current].url}
+                      controls
+                      className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
+                      onTouchStart={handleTouchStart}
+                      onTouchEnd={handleTouchEnd}
+                    />
+                  ) : (
+                    <img
+                      key={current}
+                      src={previews[current].url}
+                      alt={previews[current].name}
+                      className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
+                      onTouchStart={handleTouchStart}
+                      onTouchEnd={handleTouchEnd}
+                    />
+                  )}
                 </div>
 
                 {previews.length > 1 && (
@@ -275,7 +311,7 @@ export default function PostWritePage() {
                     <button
                       type="button"
                       onClick={prev}
-                      aria-label="이전 이미지"
+                      aria-label="이전"
                       className="absolute top-1/2 -left-10 -translate-y-1/2 rotate-180 p-3"
                     >
                       <ArrowFilled />
@@ -283,7 +319,7 @@ export default function PostWritePage() {
                     <button
                       type="button"
                       onClick={next}
-                      aria-label="다음 이미지"
+                      aria-label="다음"
                       className="absolute top-1/2 -right-10 -translate-y-1/2 p-3"
                     >
                       <ArrowFilled />
@@ -314,7 +350,11 @@ export default function PostWritePage() {
                 onClick={submitPost}
                 disabled={isSubmitting || hasUploading}
               >
-                {isSubmitting ? '게시 중...' : hasUploading ? '업로드 중...' : '게시'}
+                {isSubmitting
+                  ? '게시 중...'
+                  : hasUploading
+                    ? '업로드 중...'
+                    : '게시'}
               </button>
             </div>
           </div>
