@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { GetPostsParams, PostListResponse } from '../api/post';
+import type { GetPostsParams, PostListResponse } from './types';
 import { getPosts } from '../api/post';
 
 export const usePostList = (params: GetPostsParams = {}) => {
