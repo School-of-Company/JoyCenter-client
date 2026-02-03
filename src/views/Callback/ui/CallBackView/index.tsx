@@ -3,15 +3,21 @@
 import { useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useSignin } from '@/entity/signin/model/useSignin';
+import { signin } from '@/entity/signin/api/signin';
+import {
+  AUTH_REFRESH_TOKEN_KEY,
+  AUTH_TOKEN_KEY,
+  setCookie,
+} from '@/shared/lib/cookie';
 
-export default function CallbackView() {
-  const params = useSearchParams();
+interface CallbackViewProps {
+  provider: string;
+}
+
+export default function CallbackView({ provider }: CallbackViewProps) {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const code = params.get('code');
-  const provider = params.get('provider');
-
-  const { mutate } = useSignin();
+  const code = searchParams.get('code');
 
   useEffect(() => {
     if (!code || !provider) {
@@ -20,8 +26,25 @@ export default function CallbackView() {
       return;
     }
 
-    mutate({ code, provider });
-  }, [code, mutate, router, provider]);
+    (async () => {
+      try {
+        const res = await signin(code, provider);
 
-  return <div />;
+        console.log(res.data);
+        setCookie(AUTH_TOKEN_KEY, res.data.accessToken);
+        setCookie(AUTH_REFRESH_TOKEN_KEY, res.data.refreshToken);
+
+        toast.success('로그인에 성공했어요.');
+        router.replace('/main');
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error
+            ? err.message
+            : '로그인에 실패했어요. 다시 시도해 주세요.';
+        toast.error(message);
+        router.replace('/signin');
+      }
+    })();
+  }, [code, provider, router]);
+  return <></>;
 }
