@@ -208,7 +208,10 @@ export default function PostWritePage() {
     <>
       <div className="mt-9 flex justify-center">
         <div className="w-225 p-3">
-          <div className="text-body5 flex items-center gap-2 text-gray-900">
+          <div
+            className="text-body5 flex cursor-pointer items-center gap-2 text-gray-900"
+            onClick={() => router.back()}
+          >
             <Arrow direction="left" width={12} height={12} color="#000000" />
             <span>돌아가기</span>
           </div>
