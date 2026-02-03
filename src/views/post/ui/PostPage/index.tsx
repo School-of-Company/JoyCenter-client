@@ -27,13 +27,13 @@ export default function PostPageView() {
   });
 
   const handlePrevPage = () => {
-    if (data?.page.hasPrevious) {
+    if (data?.page?.hasPrevious) {
       setCurrentPage((prev) => prev - 1);
     }
   };
 
   const handleNextPage = () => {
-    if (data?.page.hasNext) {
+    if (data?.page?.hasNext) {
       setCurrentPage((prev) => prev + 1);
     }
   };
