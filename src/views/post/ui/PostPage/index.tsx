@@ -9,6 +9,12 @@ import Arrow from '@/shared/assets/svg/Arrow';
 import { usePostList } from '@/entity/post/model/usePostList';
 import { SortType } from '@/shared/types/post';
 
+const isImageFile = (url: string | undefined): boolean => {
+  if (!url) return false;
+  const imageExtensions = ['.png', '.jpg'];
+  return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+};
+
 export default function PostPageView() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(0);
@@ -66,16 +72,23 @@ export default function PostPageView() {
         ) : (
           <>
             <div className="grid grid-cols-3 gap-x-6 gap-y-12">
-              {posts.map((post) => (
-                <PostPreview
-                  key={post.id}
-                  imageUrl={post.thumbnail?.url}
-                  member={post.member.email}
-                  title={post.title}
-                  date={post.createdAt.split('T')[0]}
-                  onClick={() => handlePostClick(post.id)}
-                />
-              ))}
+              {posts.map((post) => {
+                const thumbnailUrl =
+                  post.thumbnail?.url && isImageFile(post.thumbnail.url)
+                    ? post.thumbnail.url
+                    : undefined;
+
+                return (
+                  <PostPreview
+                    key={post.id}
+                    imageUrl={thumbnailUrl}
+                    member={post.member.email}
+                    title={post.title}
+                    date={post.createdAt.split('T')[0]}
+                    onClick={() => handlePostClick(post.id)}
+                  />
+                );
+              })}
             </div>
             {pageInfo && (
               <div className="mt-8 flex items-center justify-center gap-5">
