@@ -30,7 +30,6 @@ export default function CallbackView({ provider }: CallbackViewProps) {
       try {
         const res = await signin(code, provider);
 
-        console.log(res.data);
         setCookie(AUTH_TOKEN_KEY, res.data.accessToken);
         setCookie(AUTH_REFRESH_TOKEN_KEY, res.data.refreshToken);
 
