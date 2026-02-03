@@ -82,6 +82,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/gwangju-talent-festival-bucket/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'joycenter-s3.s3.eu-north-1.amazonaws.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 

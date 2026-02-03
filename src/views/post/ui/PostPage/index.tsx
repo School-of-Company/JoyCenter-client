@@ -1,48 +1,117 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SortDropDown from '@/shared/ui/SortDropDown';
 import PostPreview from '@/shared/ui/PostPreview';
+import PostPreviewLoad from '@/shared/ui/PostPreview/Load';
 import Arrow from '@/shared/assets/svg/Arrow';
+import { usePostList } from '@/entity/post/model/usePostList';
+import { SortType } from '@/shared/types/post';
 
-const postData = [
-  { id: 1, member: '작성자', title: '사진제목', date: '2025-01-01' },
-  { id: 2, member: '홍길동', title: '게시글 제목 예시', date: '2025-01-02' },
-  { id: 3, member: '김철수', title: '새로운 게시글', date: '2025-01-03' },
-  { id: 4, member: '이영희', title: '공지사항', date: '2025-01-04' },
-  { id: 5, member: '박민수', title: '이벤트 안내', date: '2025-01-05' },
-  { id: 6, member: '최지영', title: '자유 게시글', date: '2025-01-06' },
-];
+const isImageFile = (url: string | undefined): boolean => {
+  if (!url) return false;
+  const imageExtensions = ['.png', '.jpg'];
+  return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+};
 
-export default function Post() {
+export default function PostPageView() {
   const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortType, setSortType] = useState<SortType>('CREATED_AT_DESC');
+
+  const { data, isLoading, error } = usePostList({
+    sort: sortType,
+    page: currentPage,
+    size: 6,
+  });
+
+  const handlePrevPage = () => {
+    if (data?.page?.hasPrevious) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data?.page?.hasNext) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePostClick = (postId: number) => {
+    router.push(`/postDetail/${postId}`);
+  };
+
+  const posts = data?.content || [];
+  const pageInfo = data?.page;
 
   return (
-    <>
-      <div className="flex justify-center">
-        <div className="flex w-286 flex-col gap-7">
-          <div className="mt-20 flex items-end justify-between self-stretch">
-            <h1 className="text-h1 text-gray-900">게시판</h1>
-            <SortDropDown />
-          </div>
+    <div className="flex justify-center">
+      <div className="flex w-286 flex-col gap-7">
+        <div className="mt-20 flex items-end justify-between self-stretch">
+          <h1 className="text-h1 text-gray-900">게시판</h1>
+          <SortDropDown onSortChange={setSortType} />
+        </div>
+
+        {isLoading ? (
           <div className="grid grid-cols-3 gap-x-6 gap-y-12">
-            {postData.map((post) => (
-              <PostPreview
-                key={post.id}
-                member={post.member}
-                title={post.title}
-                date={post.date}
-                onClick={() => router.push(`/postDetail/${post.id}`)}
-              />
+            {Array.from({ length: 6 }).map((_, index) => (
+              <PostPreviewLoad key={index} />
             ))}
           </div>
-          <div className="mt-8 flex justify-center gap-5">
-            <Arrow direction="left" color="black" />
-            <p className="text-body1">1</p>
-            <Arrow direction="right" color="black" />
+        ) : error ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-red-500">
+              게시글을 불러오는데 실패했습니다.
+            </p>
           </div>
-        </div>
+        ) : posts.length === 0 ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-gray-500">게시글이 없습니다.</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-3 gap-x-6 gap-y-12">
+              {posts.map((post) => {
+                const thumbnailUrl =
+                  post.thumbnail?.url && isImageFile(post.thumbnail.url)
+                    ? post.thumbnail.url
+                    : undefined;
+
+                return (
+                  <PostPreview
+                    key={post.id}
+                    imageUrl={thumbnailUrl}
+                    member={post.member.email}
+                    title={post.title}
+                    date={post.createdAt.split('T')[0]}
+                    onClick={() => handlePostClick(post.id)}
+                  />
+                );
+              })}
+            </div>
+            {pageInfo && (
+              <div className="mt-8 flex items-center justify-center gap-5">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={!pageInfo?.hasPrevious}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="left" color="black" />
+                </button>
+                <p className="text-body1">{pageInfo.number + 1}</p>
+                <button
+                  onClick={handleNextPage}
+                  disabled={!pageInfo?.hasNext}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="right" color="black" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </>
+    </div>
   );
 }
