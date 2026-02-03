@@ -21,14 +21,14 @@ export default function PostCard({
       className="cursor-pointer border-b border-b-gray-200 px-3"
       onClick={onClick}
     >
-      <div className="flex h-22.5 w-40 items-center justify-center rounded-lg bg-[#D9D9D9]">
+      <div className="relative flex h-22.5 w-40 items-center justify-center overflow-hidden rounded-lg bg-[#D9D9D9]">
         {imageUrl ? (
           <Image
             src={imageUrl}
             alt={title}
-            width={64}
-            height={42}
-            className="h-10.5 w-16 rounded-lg object-cover"
+            fill
+            sizes="160px"
+            className="rounded-lg object-cover"
           />
         ) : (
           <Picture width="64px" height="42px" />
