@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import FolderIcon from '@/shared/assets/svg/Folder';
@@ -6,6 +7,7 @@ import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import { instance } from '@/shared/lib/axios';
 import { AUTH_TOKEN_KEY, getCookie } from '@/shared/lib/cookie';
+import Trash from '@/shared/assets/svg/trash';
 
 export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -226,7 +228,7 @@ export default function PostWritePage() {
                 <div className="mr-2 flex items-center">
                   <button
                     type="button"
-                    className="underline-none"
+                    className="flex items-center gap-1 text-gray-400 hover:text-gray-600"
                     onClick={async () => {
                       const target = previews[current];
                       setPreviews((prev) => {
@@ -254,11 +256,12 @@ export default function PostWritePage() {
                       } else {
                         try {
                           URL.revokeObjectURL(target.url);
-                        } catch (e) {}
+                        } catch {}
                       }
                     }}
                   >
-                    파일 제거
+                    <Trash />
+                    <span>파일 제거</span>
                   </button>
                 </div>
               )}
@@ -285,25 +288,28 @@ export default function PostWritePage() {
             {previews.length > 0 && (
               <div className="relative mt-2">
                 <div className="overflow-hidden rounded-2xl border border-gray-100">
-                  {previews[current].kind === 'VIDEO' ? (
-                    <video
-                      key={current}
-                      src={previews[current].url}
-                      controls
-                      className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
-                      onTouchStart={handleTouchStart}
-                      onTouchEnd={handleTouchEnd}
-                    />
-                  ) : (
-                    <img
-                      key={current}
-                      src={previews[current].url}
-                      alt={previews[current].name}
-                      className="-mx-3 mb-2 block h-auto min-h-125 w-[calc(100%+24px)] object-cover"
-                      onTouchStart={handleTouchStart}
-                      onTouchEnd={handleTouchEnd}
-                    />
-                  )}
+                  <div className="relative -mx-3 h-125 w-[calc(100%+24px)]">
+                    {previews[current].kind === 'VIDEO' ? (
+                      <video
+                        key={current}
+                        src={previews[current].url}
+                        controls
+                        playsInline
+                        className="h-full w-full object-cover"
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
+                      />
+                    ) : (
+                      <img
+                        key={current}
+                        src={previews[current].url}
+                        alt={previews[current].name}
+                        className="h-full w-full object-cover"
+                        onTouchStart={handleTouchStart}
+                        onTouchEnd={handleTouchEnd}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 {previews.length > 1 && (
