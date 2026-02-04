@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
 import { uploadAttachment, deleteAttachment, createPost, AttachmentType } from '../api/write';
-import { AUTH_TOKEN_KEY, getCookie } from '@/shared/lib/cookie';
 
 interface Preview {
     tempId: string;
@@ -32,13 +31,16 @@ export const usePostWrite = () => {
     }, [previews]);
 
     useEffect(() => {
+        const controllers = abortControllersRef.current;
+        const previews = previewsRef.current;
+
         return () => {
-            abortControllersRef.current.forEach((controller) => {
+            controllers.forEach((controller) => {
                 controller.abort();
             });
-            abortControllersRef.current.clear();
+            controllers.clear();
 
-            previewsRef.current.forEach((p) => {
+            previews.forEach((p) => {
                 if (p.url.startsWith('blob:')) {
                     try {
                         URL.revokeObjectURL(p.url);
