@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { uploadAttachment, deleteAttachment, createPost, AttachmentType } from '../api/write';
 import { AUTH_TOKEN_KEY, getCookie } from '@/shared/lib/cookie';
 
@@ -121,13 +121,15 @@ export const usePostWrite = () => {
                     return;
                 }
 
-                const error = err as any;
-                console.error('업로드 실패', {
-                    status: error?.response?.status,
-                    data: error?.response?.data,
-                    token: getCookie(AUTH_TOKEN_KEY),
-                    err: error,
-                });
+                if (err instanceof AxiosError) {
+                    console.error('업로드 실패', {
+                        status: err.response?.status,
+                        data: err.response?.data,
+                        message: err.message,
+                    });
+                } else {
+                    console.error('업로드 실패 (알 수 없는 오류)', err);
+                }
 
                 setPreviews((previousPreviews) => {
                     const updatedPreviews = previousPreviews.map((item) =>
@@ -162,8 +164,15 @@ export const usePostWrite = () => {
         if (targetFile.attachmentsId) {
             try {
                 await deleteAttachment(targetFile.attachmentsId);
-            } catch (error) {
-                console.error('첨부파일 삭제 실패', error);
+            } catch (err) {
+                if (err instanceof AxiosError) {
+                    console.error('첨부파일 삭제 실패', {
+                        status: err.response?.status,
+                        message: err.message,
+                    });
+                } else {
+                    console.error('첨부파일 삭제 실패', err);
+                }
             }
         } else {
             try {
@@ -225,8 +234,16 @@ export const usePostWrite = () => {
 
             await createPost({ title, blocks });
             router.push('/main');
-        } catch (error) {
-            console.error('게시 실패', error);
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                console.error('게시 실패', {
+                    status: err.response?.status,
+                    data: err.response?.data,
+                    message: err.message,
+                });
+            } else {
+                console.error('게시 실패', err);
+            }
             alert('게시 실패');
         } finally {
             setIsSubmitting(false);
