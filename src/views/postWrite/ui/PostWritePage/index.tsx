@@ -73,6 +73,7 @@ export default function PostWritePage() {
           params: { attachmentsType, imageOrder: order },
           headers: { 'Content-Type': 'multipart/form-data' },
           withCredentials: true,
+          timeout: 60000, 
         });
 
         const data = res.data;
