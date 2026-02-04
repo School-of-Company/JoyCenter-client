@@ -13,7 +13,7 @@ export interface PostDetail {
     text: string;
     attachment: {
       attachmentId: number;
-      attachmentsType: 'IMAGE';
+      attachmentsType: 'IMAGE' | 'VIDEO';
       attachmentUrl: string;
     };
   }>;
