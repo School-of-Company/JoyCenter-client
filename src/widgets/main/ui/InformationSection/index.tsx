@@ -4,10 +4,14 @@ import Company from '@/shared/assets/svg/Company';
 import FAX from '@/shared/assets/svg/FAX';
 import MapPin from '@/shared/assets/svg/MapPin';
 import Phone from '@/shared/assets/svg/Phone';
+import { Section } from '@jump-section/react';
 
 export default function InformationSection() {
   return (
-    <section className="flex min-h-[800px] flex-col items-center justify-around gap-8 px-4 py-8 lg:flex-row lg:gap-4 lg:py-0">
+    <Section
+      id="information"
+      className="flex min-h-[800px] flex-col items-center justify-around gap-8 px-4 py-8 lg:flex-row lg:gap-4 lg:py-0"
+    >
       <div className="flex w-full max-w-[700px] flex-col justify-around gap-6 lg:gap-8">
         <Explanation
           title="전화번호"
@@ -34,6 +38,6 @@ export default function InformationSection() {
         <h3 className="text-h3 text-center">오시는 길</h3>
         <KakaoMap />
       </div>
-    </section>
+    </Section>
   );
 }

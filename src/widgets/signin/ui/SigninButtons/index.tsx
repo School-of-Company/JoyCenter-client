@@ -6,7 +6,7 @@ export default function SigninButtons() {
   return (
     <>
       <Link
-        href={`https://accounts.google.com/o/oauth2/v2/auth?response_type=code&scope=openid%20email%20profile&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&prompt=consent`}
+        href={`https://accounts.google.com/o/oauth2/v2/auth?response_type=code&scope=openid%20email%20profile&client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI}&prompt=consent`}
         className="text-body1 mt-4 mb-3 flex w-full items-center justify-around rounded-xl border border-gray-100 bg-white px-4 py-3"
       >
         <Google />
@@ -14,7 +14,7 @@ export default function SigninButtons() {
         <div className="size-8" />
       </Link>
       <Link
-        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_REDIRECT_URI}&scope=account_email&prompt=login`}
+        href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}&scope=account_email&prompt=login`}
         className="text-body1 flex w-full items-center justify-around rounded-xl bg-[#FEE500] px-4 py-3"
       >
         <Kakao />
