@@ -53,7 +53,6 @@ export default function PostWritePage() {
               {previews.length > 0 && (
                 <div className="mr-2 flex items-center">
                   <button
-                    type="button"
                     className="flex items-center gap-1 text-gray-400 hover:text-gray-600"
                     onClick={removeFile}
                   >
@@ -65,7 +64,6 @@ export default function PostWritePage() {
 
               <div className="flex items-center gap-2">
                 <button
-                  type="button"
                   className="flex items-center gap-2"
                   onClick={openFile}
                 >
@@ -108,7 +106,6 @@ export default function PostWritePage() {
                 {previews.length > 1 && (
                   <>
                     <button
-                      type="button"
                       onClick={goToPrevious}
                       aria-label="이전"
                       className="absolute top-1/2 -left-10 -translate-y-1/2 rotate-180 p-3"
@@ -116,7 +113,6 @@ export default function PostWritePage() {
                       <ArrowFilled />
                     </button>
                     <button
-                      type="button"
                       onClick={goToNext}
                       aria-label="다음"
                       className="absolute top-1/2 -right-10 -translate-y-1/2 p-3"
@@ -137,14 +133,12 @@ export default function PostWritePage() {
           <div className="mt-3">
             <div className="flex justify-end gap-4 p-1 pr-2">
               <button
-                type="button"
                 onClick={() => router.back()}
                 className="border-main-yellow-800 text-body3 rounded-lg border px-8 py-2 text-gray-900"
               >
                 취소
               </button>
               <button
-                type="button"
                 className="bg-main-yellow-100 border-main-yellow-400 text-body3 rounded-lg border px-8 py-2 text-gray-900"
                 onClick={submitPost}
                 disabled={isSubmitting || isUploadingFiles}
