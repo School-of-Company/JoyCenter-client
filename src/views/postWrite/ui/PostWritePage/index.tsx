@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
@@ -11,6 +12,7 @@ import Trash from '@/shared/assets/svg/trash';
 
 export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
+  const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
   const [previews, setPreviews] = useState<
     {
       tempId: string;
@@ -65,6 +67,9 @@ export default function PostWritePage() {
         ? 'VIDEO'
         : 'IMAGE';
 
+      const controller = new AbortController();
+      abortControllersRef.current.set(preview.tempId, controller);
+
       try {
         const fd = new FormData();
         fd.append('file', file);
@@ -74,6 +79,7 @@ export default function PostWritePage() {
           headers: { 'Content-Type': 'multipart/form-data' },
           withCredentials: true,
           timeout: 60000, 
+          signal: controller.signal,
         });
 
         const data = res.data;
@@ -101,6 +107,11 @@ export default function PostWritePage() {
           return updated;
         });
       } catch (err) {
+        if (axios.isCancel(err)) {
+             console.log('Upload canceled for', preview.name);
+             return;
+        }
+
         const e = err as any;
         console.error('업로드 실패', {
           status: e?.response?.status,
@@ -116,6 +127,8 @@ export default function PostWritePage() {
           previewsRef.current = updated;
           return updated;
         });
+      } finally {
+        abortControllersRef.current.delete(preview.tempId);
       }
     });
   };
@@ -150,6 +163,12 @@ export default function PostWritePage() {
 
   useEffect(() => {
     return () => {
+      // Abort all pending uploads on unmount
+      abortControllersRef.current.forEach((controller) => {
+          controller.abort();
+      });
+      abortControllersRef.current.clear();
+
       previewsRef.current.forEach((p) => {
         if (p.url.startsWith('blob:')) {
           try {
