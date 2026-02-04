@@ -46,8 +46,13 @@ export default function PostWritePage() {
       };
     });
 
-    const prevLen = previews.length;
-    setPreviews((prev) => [...prev, ...newPreviews]);
+    const currentPreviews = previewsRef.current;
+    const prevLen = currentPreviews.length;
+    
+    const nextPreviews = [...currentPreviews, ...newPreviews];
+    previewsRef.current = nextPreviews;
+    
+    setPreviews(nextPreviews);
     setCurrent(prevLen);
 
     if (fileRef.current) fileRef.current.value = '';
@@ -73,7 +78,7 @@ export default function PostWritePage() {
         const data = res.data;
 
         setPreviews((prev) => {
-          return prev.map((p) => {
+          const updated = prev.map((p) => {
             if (p.tempId !== preview.tempId) return p;
 
             const oldUrl = p.url;
@@ -90,6 +95,9 @@ export default function PostWritePage() {
               uploading: false,
             };
           });
+          // Update ref with the uploaded state
+          previewsRef.current = updated;
+          return updated;
         });
       } catch (err) {
         const e = err as any;
@@ -100,11 +108,13 @@ export default function PostWritePage() {
           err: e,
         });
 
-        setPreviews((prev) =>
-          prev.map((p) =>
+        setPreviews((prev) => {
+           const updated = prev.map((p) =>
             p.tempId === preview.tempId ? { ...p, uploading: false } : p,
-          ),
-        );
+          );
+          previewsRef.current = updated;
+          return updated;
+        });
       }
     });
   };
@@ -234,16 +244,23 @@ export default function PostWritePage() {
                     className="flex items-center gap-1 text-gray-400 hover:text-gray-600"
                     onClick={async () => {
                       const target = previews[current];
-                      setPreviews((prev) => {
-                        if (!prev[current]) return prev;
-                        const nextArr = prev.filter(
-                          (_, idx) => idx !== current,
-                        );
-                        if (nextArr.length === 0) setCurrent(0);
-                        else if (current >= nextArr.length)
-                          setCurrent(nextArr.length - 1);
-                        return nextArr;
-                      });
+                      
+                      // Use ref to manage deletion safely
+                      const currentPreviews = previewsRef.current;
+                      if (!currentPreviews[current]) return;
+
+                      const nextArr = currentPreviews.filter(
+                        (_, idx) => idx !== current,
+                      );
+                      
+                      const nextCurrent = (nextArr.length === 0) 
+                        ? 0 
+                        : (current >= nextArr.length ? nextArr.length - 1 : current);
+                        
+                      // Sync ref immediately
+                      previewsRef.current = nextArr;
+                      setPreviews(nextArr);
+                      setCurrent(nextCurrent);
 
                       if (!target) return;
 
