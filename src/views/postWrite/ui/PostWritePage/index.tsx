@@ -1,238 +1,31 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import React from 'react';
 import FolderIcon from '@/shared/assets/svg/Folder';
 import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
-import { instance } from '@/shared/lib/axios';
-import { AUTH_TOKEN_KEY, getCookie } from '@/shared/lib/cookie';
 import Trash from '@/shared/assets/svg/trash';
+import { usePostWrite } from '@/widgets/postWrite/model/usePostWrite';
 
 export default function PostWritePage() {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
-  const [previews, setPreviews] = useState<
-    {
-      tempId: string;
-      name: string;
-      url: string;
-      kind: 'IMAGE' | 'VIDEO';
-      attachmentsId?: number;
-      uploading?: boolean;
-    }[]
-  >([]);
-  const [current, setCurrent] = useState<number>(0);
-  const router = useRouter();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const openFile = () => fileRef.current?.click();
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files ? Array.from(e.target.files) : [];
-    if (files.length === 0) return;
-
-    const newPreviews = files.map((f: File) => {
-      const kind: 'IMAGE' | 'VIDEO' = f.type.startsWith('video/')
-        ? 'VIDEO'
-        : 'IMAGE';
-
-      return {
-        tempId: Math.random().toString(36).substring(7),
-        name: f.name,
-        url: URL.createObjectURL(f),
-        kind,
-        uploading: true,
-      };
-    });
-
-    const currentPreviews = previewsRef.current;
-    const prevLen = currentPreviews.length;
-    
-    const nextPreviews = [...currentPreviews, ...newPreviews];
-    previewsRef.current = nextPreviews;
-    
-    setPreviews(nextPreviews);
-    setCurrent(prevLen);
-
-    if (fileRef.current) fileRef.current.value = '';
-
-    newPreviews.forEach(async (preview, idx) => {
-      const file = files[idx];
-      const order = prevLen + idx + 1;
-
-      const attachmentsType: 'IMAGE' | 'VIDEO' = file.type.startsWith('video/')
-        ? 'VIDEO'
-        : 'IMAGE';
-
-      const controller = new AbortController();
-      abortControllersRef.current.set(preview.tempId, controller);
-
-      try {
-        const fd = new FormData();
-        fd.append('file', file);
-
-        const res = await instance.post('/attachments', fd, {
-          params: { attachmentsType, imageOrder: order },
-          headers: { 'Content-Type': 'multipart/form-data' },
-          withCredentials: true,
-          timeout: 60000, 
-          signal: controller.signal,
-        });
-
-        const data = res.data;
-
-        setPreviews((prev) => {
-          const updated = prev.map((p) => {
-            if (p.tempId !== preview.tempId) return p;
-
-            const oldUrl = p.url;
-            if (oldUrl.startsWith('blob:')) {
-              try {
-                URL.revokeObjectURL(oldUrl);
-              } catch {}
-            }
-
-            return {
-              ...p,
-              url: data.url,
-              attachmentsId: data.attachmentsId,
-              uploading: false,
-            };
-          });
-          // Update ref with the uploaded state
-          previewsRef.current = updated;
-          return updated;
-        });
-      } catch (err) {
-        if (axios.isCancel(err)) {
-             console.log('Upload canceled for', preview.name);
-             return;
-        }
-
-        const e = err as any;
-        console.error('업로드 실패', {
-          status: e?.response?.status,
-          data: e?.response?.data,
-          token: getCookie(AUTH_TOKEN_KEY),
-          err: e,
-        });
-
-        setPreviews((prev) => {
-           const updated = prev.map((p) =>
-            p.tempId === preview.tempId ? { ...p, uploading: false } : p,
-          );
-          previewsRef.current = updated;
-          return updated;
-        });
-      } finally {
-        abortControllersRef.current.delete(preview.tempId);
-      }
-    });
-  };
-
-  const prev = () => {
-    setCurrent((c) =>
-      previews.length ? (c - 1 + previews.length) % previews.length : 0,
-    );
-  };
-
-  const next = () => {
-    setCurrent((c) => (previews.length ? (c + 1) % previews.length : 0));
-  };
-
-  const touchStartX = useRef<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current == null) return;
-    const endX = e.changedTouches[0].clientX;
-    const delta = touchStartX.current - endX;
-    if (delta > 50) next();
-    else if (delta < -50) prev();
-    touchStartX.current = null;
-  };
-
-  const previewsRef = useRef(previews);
-  useEffect(() => {
-    previewsRef.current = previews;
-  }, [previews]);
-
-  useEffect(() => {
-    return () => {
-      // Abort all pending uploads on unmount
-      abortControllersRef.current.forEach((controller) => {
-          controller.abort();
-      });
-      abortControllersRef.current.clear();
-
-      previewsRef.current.forEach((p) => {
-        if (p.url.startsWith('blob:')) {
-          try {
-            URL.revokeObjectURL(p.url);
-          } catch {}
-        }
-      });
-    };
-  }, []);
-
-  const hasUploading = previews.some((p) => p.uploading);
-
-  const submitPost = async () => {
-    if (!title.trim()) {
-      alert('제목을 입력하세요');
-      return;
-    }
-
-    if (hasUploading) {
-      alert('파일 업로드가 완료될 때까지 기다려주세요');
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const blocks: {
-        order: number;
-        blockType: 'TEXT' | 'ATTACHMENT';
-        text?: string;
-        attachmentId?: number;
-      }[] = [];
-
-      let order = 0;
-
-      if (content.trim()) {
-        blocks.push({
-          order: order++,
-          blockType: 'TEXT',
-          text: content,
-        });
-      }
-
-      const attachments = previews.filter((p) => p.attachmentsId);
-      attachments.forEach((p) => {
-        blocks.push({
-          order: order++,
-          blockType: 'ATTACHMENT',
-          attachmentId: p.attachmentsId!,
-        });
-      });
-
-      const res = await instance.post('/post', { title, blocks });
-      if (res.status === 201) {
-        router.push('/main');
-      } else {
-        alert('게시 실패');
-      }
-    } catch (err) {
-      console.error('게시 실패', err);
-      alert('게시 실패');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const {
+    fileRef,
+    previews,
+    current,
+    title,
+    setTitle,
+    content,
+    setContent,
+    isSubmitting,
+    isUploadingFiles,
+    openFile,
+    onFile,
+    removeFile,
+    goToPrevious,
+    goToNext,
+    submitPost,
+    router,
+  } = usePostWrite();
 
   return (
     <>
@@ -262,43 +55,7 @@ export default function PostWritePage() {
                   <button
                     type="button"
                     className="flex items-center gap-1 text-gray-400 hover:text-gray-600"
-                    onClick={async () => {
-                      const target = previews[current];
-                      
-                      // Use ref to manage deletion safely
-                      const currentPreviews = previewsRef.current;
-                      if (!currentPreviews[current]) return;
-
-                      const nextArr = currentPreviews.filter(
-                        (_, idx) => idx !== current,
-                      );
-                      
-                      const nextCurrent = (nextArr.length === 0) 
-                        ? 0 
-                        : (current >= nextArr.length ? nextArr.length - 1 : current);
-                        
-                      // Sync ref immediately
-                      previewsRef.current = nextArr;
-                      setPreviews(nextArr);
-                      setCurrent(nextCurrent);
-
-                      if (!target) return;
-
-                      if (target.attachmentsId) {
-                        try {
-                          await instance.delete(
-                            `/attachments/${target.attachmentsId}`,
-                            { withCredentials: true },
-                          );
-                        } catch (err) {
-                          console.error('첨부파일 삭제 실패', err);
-                        }
-                      } else {
-                        try {
-                          URL.revokeObjectURL(target.url);
-                        } catch {}
-                      }
-                    }}
+                    onClick={removeFile}
                   >
                     <Trash />
                     <span>파일 제거</span>
@@ -336,8 +93,6 @@ export default function PostWritePage() {
                         controls
                         playsInline
                         className="h-full w-full object-cover"
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
                       />
                     ) : (
                       <img
@@ -345,8 +100,6 @@ export default function PostWritePage() {
                         src={previews[current].url}
                         alt={previews[current].name}
                         className="h-full w-full object-cover"
-                        onTouchStart={handleTouchStart}
-                        onTouchEnd={handleTouchEnd}
                       />
                     )}
                   </div>
@@ -356,7 +109,7 @@ export default function PostWritePage() {
                   <>
                     <button
                       type="button"
-                      onClick={prev}
+                      onClick={goToPrevious}
                       aria-label="이전"
                       className="absolute top-1/2 -left-10 -translate-y-1/2 rotate-180 p-3"
                     >
@@ -364,7 +117,7 @@ export default function PostWritePage() {
                     </button>
                     <button
                       type="button"
-                      onClick={next}
+                      onClick={goToNext}
                       aria-label="다음"
                       className="absolute top-1/2 -right-10 -translate-y-1/2 p-3"
                     >
@@ -394,11 +147,11 @@ export default function PostWritePage() {
                 type="button"
                 className="bg-main-yellow-100 border-main-yellow-400 text-body3 rounded-lg border px-8 py-2 text-gray-900"
                 onClick={submitPost}
-                disabled={isSubmitting || hasUploading}
+                disabled={isSubmitting || isUploadingFiles}
               >
                 {isSubmitting
                   ? '게시 중...'
-                  : hasUploading
+                  : isUploadingFiles
                     ? '업로드 중...'
                     : '게시'}
               </button>
