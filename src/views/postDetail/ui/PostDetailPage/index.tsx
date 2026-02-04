@@ -1,8 +1,9 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import Picture from '@/shared/assets/svg/Picture';
+import Image from 'next/image';
 import PostCard from '@/shared/ui/PostCard';
+import Arrow from '@/shared/assets/svg/Arrow';
 import { usePostDetail } from '@/entity/postDetail/model/usePostDetail';
 import { usePostList } from '@/entity/post/model/usePostList';
 
@@ -44,59 +45,98 @@ export default function PostDetail() {
     });
   };
 
-  const imageBlock = postDetail.blocks.find((block) => block.attachment);
+  const handleBackToList = () => {
+    router.push('/post');
+  };
+
+  const attachmentBlocks = postDetail.blocks
+    .filter((block) => block.attachment)
+    .sort((a, b) => a.order - b.order);
+
   const textBlocks = postDetail.blocks.filter((block) => block.text);
   const allText = textBlocks.map((block) => block.text).join('\n\n');
 
   return (
-    <>
-      <div className="flex justify-center">
-        <div className="mt-20 flex w-300 justify-between">
-          <div className="flex flex-col">
-            <div className="mb-3 p-3">
-              <p className="text-h1">{postDetail.title}</p>
-              <div className="text-body5 mt-2 flex items-center gap-3 text-gray-900">
-                <p>{postDetail.member.email}</p>
-                <div className="w-px self-stretch bg-gray-500" />
-                <p>{formatDate(postDetail.createdAt)}</p>
+    <div className="flex justify-center">
+      <div className="my-20 flex w-300 justify-between">
+        <div className="flex flex-col">
+          <div className="mb-1 p-3">
+            <div className="flex flex-row gap-4">
+              <button
+                className="flex cursor-pointer items-center"
+                onClick={handleBackToList}
+                aria-label="게시판으로 돌아가기"
+              >
+                <Arrow
+                  direction="left"
+                  color="#1a1a1b"
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <div>
+                <p className="text-h1">{postDetail.title}</p>
               </div>
             </div>
-            <hr className="my-2 w-240 border-gray-900" />
-            <div className="flex justify-center px-5 py-8">
-              <div className="flex h-84.5 w-150 items-center justify-center rounded-2xl bg-[#D9D9D9]">
-                {imageBlock?.attachment ? (
-                  <img
-                    src={imageBlock.attachment.attachmentUrl}
-                    alt="첨부 이미지"
-                    className="h-full w-full rounded-2xl object-cover"
-                  />
-                ) : (
-                  <Picture width="245px" height="157px" />
-                )}
-              </div>
-            </div>
-            <div className="flex justify-center px-5">
-              <div className="text-body5 w-230 leading-[140%] text-gray-900">
-                <p>{allText || '내용이 없습니다.'}</p>
-              </div>
+            <div className="text-body5 mt-2 ml-8 flex items-center gap-3 text-gray-900">
+              <p>{postDetail.member.email}</p>
+              <div className="w-px self-stretch bg-gray-500" />
+              <p>{formatDate(postDetail.createdAt)}</p>
             </div>
           </div>
-          <div className="px-3 py-10">
-            <h2 className="text-h4 mb-4">최신글</h2>
-            <div className="flex flex-col gap-6">
-              {recentPosts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  title={post.title}
-                  member={post.member.email}
-                  imageUrl={post.thumbnail?.url}
-                  onClick={() => router.push(`/postDetail/${post.id}`)}
-                />
+
+          <hr className="my-2 w-240 border-gray-900" />
+
+          {attachmentBlocks.length > 0 && (
+            <div className="flex flex-col items-center gap-6 px-5 py-8">
+              {attachmentBlocks.map((block) => (
+                <div
+                  key={block.blockId}
+                  className="relative flex h-84.5 w-150 items-center justify-center overflow-hidden rounded-2xl bg-[#D9D9D9]"
+                >
+                  {block.attachment.attachmentsType === 'VIDEO' ? (
+                    <video
+                      src={block.attachment.attachmentUrl}
+                      controls
+                      className="h-full w-full rounded-2xl object-cover"
+                    >
+                      브라우저가 비디오를 지원하지 않습니다.
+                    </video>
+                  ) : (
+                    <Image
+                      src={block.attachment.attachmentUrl}
+                      alt={`첨부 이미지 ${block.blockId}`}
+                      fill
+                      sizes="600px"
+                      className="rounded-2xl object-cover"
+                    />
+                  )}
+                </div>
               ))}
+            </div>
+          )}
+
+          <div className="flex justify-center px-5">
+            <div className="text-body3 w-230 leading-[140%] text-gray-900">
+              <p>{allText || '내용이 없습니다.'}</p>
             </div>
           </div>
         </div>
+        <div className="px-3 py-10">
+          <h2 className="text-h4 mb-4">최신글</h2>
+          <div className="flex flex-col gap-6">
+            {recentPosts.map((post) => (
+              <PostCard
+                key={post.id}
+                title={post.title}
+                member={post.member.email}
+                imageUrl={post.thumbnail?.url}
+                onClick={() => router.push(`/postDetail/${post.id}`)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
