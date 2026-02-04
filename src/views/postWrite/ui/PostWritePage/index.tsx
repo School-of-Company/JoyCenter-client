@@ -13,6 +13,7 @@ export default function PostWritePage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [previews, setPreviews] = useState<
     {
+      tempId: string;
       name: string;
       url: string;
       kind: 'IMAGE' | 'VIDEO';
@@ -37,6 +38,7 @@ export default function PostWritePage() {
         : 'IMAGE';
 
       return {
+        tempId: Math.random().toString(36).substring(7),
         name: f.name,
         url: URL.createObjectURL(f),
         kind,
@@ -50,7 +52,8 @@ export default function PostWritePage() {
 
     if (fileRef.current) fileRef.current.value = '';
 
-    files.forEach(async (file, idx) => {
+    newPreviews.forEach(async (preview, idx) => {
+      const file = files[idx];
       const order = prevLen + idx + 1;
 
       const attachmentsType: 'IMAGE' | 'VIDEO' = file.type.startsWith('video/')
@@ -70,24 +73,23 @@ export default function PostWritePage() {
         const data = res.data;
 
         setPreviews((prev) => {
-          const newArr = [...prev];
-          const targetIdx = prevLen + idx;
-          if (!newArr[targetIdx]) return prev;
+          return prev.map((p) => {
+            if (p.tempId !== preview.tempId) return p;
 
-          const oldUrl = newArr[targetIdx].url;
-          if (oldUrl.startsWith('blob:')) {
-            try {
-              URL.revokeObjectURL(oldUrl);
-            } catch {}
-          }
+            const oldUrl = p.url;
+            if (oldUrl.startsWith('blob:')) {
+              try {
+                URL.revokeObjectURL(oldUrl);
+              } catch {}
+            }
 
-          newArr[targetIdx] = {
-            ...newArr[targetIdx],
-            url: data.url,
-            attachmentsId: data.attachmentsId,
-            uploading: false,
-          };
-          return newArr;
+            return {
+              ...p,
+              url: data.url,
+              attachmentsId: data.attachmentsId,
+              uploading: false,
+            };
+          });
         });
       } catch (err) {
         const e = err as any;
@@ -98,13 +100,11 @@ export default function PostWritePage() {
           err: e,
         });
 
-        setPreviews((prev) => {
-          const newArr = [...prev];
-          const targetIdx = prevLen + idx;
-          if (!newArr[targetIdx]) return prev;
-          newArr[targetIdx] = { ...newArr[targetIdx], uploading: false };
-          return newArr;
-        });
+        setPreviews((prev) =>
+          prev.map((p) =>
+            p.tempId === preview.tempId ? { ...p, uploading: false } : p,
+          ),
+        );
       }
     });
   };
