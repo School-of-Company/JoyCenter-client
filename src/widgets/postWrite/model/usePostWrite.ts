@@ -1,16 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios, { AxiosError } from 'axios';
-import { uploadAttachment, deleteAttachment, createPost, AttachmentType } from '../api/write';
-
-interface Preview {
-    tempId: string;
-    name: string;
-    url: string;
-    kind: 'IMAGE' | 'VIDEO';
-    attachmentsId?: number;
-    uploading?: boolean;
-}
+import { uploadAttachment, deleteAttachment, createPost } from '../api/write';
+import type { AttachmentType, Preview } from './types';
 
 export const usePostWrite = () => {
     const router = useRouter();

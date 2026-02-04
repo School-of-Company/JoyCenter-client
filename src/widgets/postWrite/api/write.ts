@@ -1,28 +1,10 @@
 import { instance } from '@/shared/lib/axios';
-
-export type AttachmentType = 'IMAGE' | 'VIDEO';
-
-export interface UploadAttachmentParams {
-    file: File;
-    attachmentsType: AttachmentType;
-    imageOrder: number;
-    signal?: AbortSignal;
-}
-
-export interface AttachmentResponse {
-    url: string;
-    attachmentsId: number;
-}
-
-export interface CreatePostParams {
-    title: string;
-    blocks: {
-        order: number;
-        blockType: 'TEXT' | 'ATTACHMENT';
-        text?: string;
-        attachmentId?: number;
-    }[];
-}
+import type {
+    AttachmentType,
+    UploadAttachmentParams,
+    AttachmentResponse,
+    CreatePostParams,
+} from '../model/types';
 
 export const uploadAttachment = async ({
     file,
