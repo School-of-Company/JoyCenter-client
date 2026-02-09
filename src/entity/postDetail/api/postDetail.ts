@@ -1,6 +1,6 @@
 import { instance } from '@/shared/lib/axios';
-import type { PostDetail } from '../model/types';
-export const getPostDetail = async (postId: number): Promise<PostDetail> => {
-  const response = await instance.get<PostDetail>(`/post/${postId}`);
+import type { BlockType } from '@/shared/types/block';
+export const getPostDetail = async (postId: number): Promise<BlockType> => {
+  const response = await instance.get<BlockType>(`/post/${postId}`);
   return response.data;
 };
