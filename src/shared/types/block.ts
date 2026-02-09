@@ -1,4 +1,4 @@
-export interface PostDetail {
+export interface BlockType {
   title: string;
   createdAt: string;
   updatedAt: string;
