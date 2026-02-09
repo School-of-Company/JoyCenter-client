@@ -1,11 +1,11 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 import PostCard from '@/shared/ui/PostCard';
 import Arrow from '@/shared/assets/svg/Arrow';
 import { usePostDetail } from '@/entity/postDetail/model/usePostDetail';
 import { usePostList } from '@/entity/post/model/usePostList';
+import AttachmentBlocks from '../AttachmentBlocks';
 
 export default function PostDetail() {
   const params = useParams();
@@ -49,10 +49,6 @@ export default function PostDetail() {
     router.push('/post');
   };
 
-  const attachmentBlocks = postDetail.blocks
-    .filter((block) => block.attachment)
-    .sort((a, b) => a.order - b.order);
-
   const textBlocks = postDetail.blocks.filter((block) => block.text);
   const allText = textBlocks.map((block) => block.text).join('\n\n');
 
@@ -87,34 +83,7 @@ export default function PostDetail() {
 
           <hr className="my-2 w-240 border-gray-900" />
 
-          {attachmentBlocks.length > 0 && (
-            <div className="flex flex-col items-center gap-6 px-5 py-8">
-              {attachmentBlocks.map((block) => (
-                <div
-                  key={block.blockId}
-                  className="relative flex h-84.5 w-150 items-center justify-center overflow-hidden rounded-2xl bg-[#D9D9D9]"
-                >
-                  {block.attachment.attachmentsType === 'VIDEO' ? (
-                    <video
-                      src={block.attachment.attachmentUrl}
-                      controls
-                      className="h-full w-full rounded-2xl object-cover"
-                    >
-                      브라우저가 비디오를 지원하지 않습니다.
-                    </video>
-                  ) : (
-                    <Image
-                      src={block.attachment.attachmentUrl}
-                      alt={`첨부 이미지 ${block.blockId}`}
-                      fill
-                      sizes="600px"
-                      className="rounded-2xl object-cover"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          <AttachmentBlocks blocks={postDetail.blocks} />
 
           <div className="flex justify-center px-5">
             <div className="text-body3 w-230 leading-[140%] text-gray-900">
