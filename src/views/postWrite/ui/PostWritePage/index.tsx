@@ -73,7 +73,7 @@ export default function PostWritePage() {
                   accept="image/*, video/*"
                   multiple
                   ref={fileRef}
-                  style={{ display: 'none' }}
+                  hidden
                   onChange={onFile}
                 />
               </div>
