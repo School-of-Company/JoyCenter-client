@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
 import { uploadAttachment, deleteAttachment, createPost } from '../api/write';
-import type { AttachmentType, Preview } from './types';
+import type { AttachmentType, Preview, CreatePostBlock } from './types';
 
 export const usePostWrite = () => {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -20,13 +20,13 @@ export const usePostWrite = () => {
 
   useEffect(() => {
     const controllers = abortControllersRef.current;
-    const previews = previewsRef.current;
+    const previewsSnapshot = previewsRef.current;
 
     return () => {
       controllers.forEach((controller) => controller.abort());
       controllers.clear();
 
-      previews.forEach((p) => {
+      previewsSnapshot.forEach((p) => {
         if (p.url.startsWith('blob:')) {
           try {
             URL.revokeObjectURL(p.url);
@@ -42,13 +42,14 @@ export const usePostWrite = () => {
     const files = e.target.files ? Array.from(e.target.files) : [];
     if (files.length === 0) return;
 
-    const newPreviews = files.map((f: File) => {
-      const kind: 'IMAGE' | 'VIDEO' = f.type.startsWith('video/') ? 'VIDEO' : 'IMAGE';
+    const newPreviews: Preview[] = files.map((f) => {
+      const attachmentsType: AttachmentType = f.type.startsWith('video/') ? 'VIDEO' : 'IMAGE';
+
       return {
         tempId: Math.random().toString(36).substring(7),
         name: f.name,
         url: URL.createObjectURL(f),
-        kind,
+        attachmentsType,
         uploading: true,
       };
     });
@@ -68,21 +69,19 @@ export const usePostWrite = () => {
       const file = files[index];
       const uploadOrder = previousLength + index + 1;
 
-      const attachmentsType: AttachmentType = file.type.startsWith('video/') ? 'VIDEO' : 'IMAGE';
-
       const controller = new AbortController();
       abortControllersRef.current.set(preview.tempId, controller);
 
       try {
         const uploadedData = await uploadAttachment({
           file,
-          attachmentsType,
+          attachmentsType: preview.attachmentsType,
           imageOrder: uploadOrder,
           signal: controller.signal,
         });
 
-        setPreviews((previousPreviews) => {
-          const updatedPreviews = previousPreviews.map((item) => {
+        setPreviews((prev) => {
+          const next = prev.map((item) => {
             if (item.tempId !== preview.tempId) return item;
 
             const temporaryUrl = item.url;
@@ -94,13 +93,15 @@ export const usePostWrite = () => {
 
             return {
               ...item,
-              url: uploadedData.url,
-              attachmentsId: uploadedData.attachmentsId,
+              url: uploadedData.attachmentUrl,
+              attachmentsType: uploadedData.attachmentsType,
+              attachmentId: uploadedData.attachmentId,
               uploading: false,
             };
           });
-          previewsRef.current = updatedPreviews;
-          return updatedPreviews;
+
+          previewsRef.current = next;
+          return next;
         });
       } catch (err) {
         if (axios.isCancel(err)) {
@@ -118,12 +119,12 @@ export const usePostWrite = () => {
           console.error('업로드 실패 (알 수 없는 오류)', err);
         }
 
-        setPreviews((previousPreviews) => {
-          const updatedPreviews = previousPreviews.map((item) =>
+        setPreviews((prev) => {
+          const next = prev.map((item) =>
             item.tempId === preview.tempId ? { ...item, uploading: false } : item,
           );
-          previewsRef.current = updatedPreviews;
-          return updatedPreviews;
+          previewsRef.current = next;
+          return next;
         });
       } finally {
         abortControllersRef.current.delete(preview.tempId);
@@ -152,9 +153,9 @@ export const usePostWrite = () => {
 
     if (!targetFile) return;
 
-    if (targetFile.attachmentsId) {
+    if (typeof targetFile.attachmentId === 'number') {
       try {
-        await deleteAttachment(targetFile.attachmentsId);
+        await deleteAttachment(targetFile.attachmentId);
       } catch (err) {
         if (err instanceof AxiosError) {
           console.error('첨부파일 삭제 실패', {
@@ -173,16 +174,14 @@ export const usePostWrite = () => {
   };
 
   const goToPrevious = () => {
-    setCurrent((currentIndex) =>
-      previews.length ? (currentIndex - 1 + previews.length) % previews.length : 0,
-    );
+    setCurrent((idx) => (previews.length ? (idx - 1 + previews.length) % previews.length : 0));
   };
 
   const goToNext = () => {
-    setCurrent((currentIndex) => (previews.length ? (currentIndex + 1) % previews.length : 0));
+    setCurrent((idx) => (previews.length ? (idx + 1) % previews.length : 0));
   };
 
-  const isUploadingFiles = previews.some((preview) => preview.uploading);
+  const isUploadingFiles = previews.some((p) => p.uploading);
 
   const submitPost = async (): Promise<boolean> => {
     if (!title.trim()) {
@@ -197,29 +196,27 @@ export const usePostWrite = () => {
 
     setIsSubmitting(true);
     try {
-      const blocks: {
-        order: number;
-        blockType: 'TEXT' | 'ATTACHMENT';
-        text?: string;
-        attachmentId?: number;
-      }[] = [];
-
+      const blocks: CreatePostBlock[] = [];
       let order = 0;
 
-      if (content.trim()) {
+      const trimmedContent = content.trim();
+      if (trimmedContent) {
         blocks.push({
           order: order++,
           blockType: 'TEXT',
-          text: content,
+          text: trimmedContent,
         });
       }
 
-      const uploadedAttachments = previews.filter((preview) => preview.attachmentsId);
-      uploadedAttachments.forEach((attachment) => {
+      const uploaded = previews.filter(
+        (p): p is Preview & { attachmentId: number } => typeof p.attachmentId === 'number',
+      );
+
+      uploaded.forEach((p) => {
         blocks.push({
           order: order++,
           blockType: 'ATTACHMENT',
-          attachmentId: attachment.attachmentsId!,
+          attachmentId: p.attachmentId,
         });
       });
 

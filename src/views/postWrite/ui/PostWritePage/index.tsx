@@ -95,7 +95,7 @@ export default function PostWritePage() {
               <div className="relative mt-2">
                 <div className="overflow-hidden rounded-2xl border border-gray-100">
                   <div className="relative -mx-3 h-125 w-[calc(100%+24px)]">
-                    {previews[current].kind === 'VIDEO' ? (
+                    {previews[current].attachmentsType  === 'VIDEO' ? (
                       <video
                         key={current}
                         src={previews[current].url}
