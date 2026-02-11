@@ -27,9 +27,7 @@ export const uploadAttachment = async ({
 };
 
 export const deleteAttachment = async (attachmentsId: number): Promise<void> => {
-    await instance.delete(`/attachments/${attachmentsId}`, {
-        withCredentials: true,
-    });
+  await instance.delete(`/attachments/${attachmentsId}`);
 };
 
 export const createPost = async (params: CreatePostParams): Promise<void> => {
