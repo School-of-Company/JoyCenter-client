@@ -5,14 +5,14 @@ import { createPost } from '../api/post';
 import type { AttachmentType, Preview, CreatePostBlock } from './types';
 
 export const usePostWrite = () => {
+  const formRef = useRef<HTMLFormElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
   const abortControllersRef = useRef<Map<string, AbortController>>(new Map());
   const previewsRef = useRef<Preview[]>([]);
 
   const [previews, setPreviews] = useState<Preview[]>([]);
   const [current, setCurrent] = useState<number>(0);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -185,7 +185,17 @@ export const usePostWrite = () => {
   const isUploadingFiles = previews.some((p) => p.uploading);
 
   const submitPost = async (): Promise<boolean> => {
-    if (!title.trim()) {
+    const formEl = formRef.current;
+    if (!formEl) {
+      alert('폼이 존재하지 않습니다');
+      return false;
+    }
+
+    const fd = new FormData(formEl);
+    const title = String(fd.get('title') ?? '').trim();
+    const content = String(fd.get('content') ?? '').trim();
+
+    if (!title) {
       alert('제목을 입력하세요');
       return false;
     }
@@ -200,12 +210,11 @@ export const usePostWrite = () => {
       const blocks: CreatePostBlock[] = [];
       let order = 0;
 
-      const trimmedContent = content.trim();
-      if (trimmedContent) {
+      if (content) {
         blocks.push({
           order: order++,
           blockType: 'TEXT',
-          text: trimmedContent,
+          text: content,
         });
       }
 
@@ -241,13 +250,10 @@ export const usePostWrite = () => {
   };
 
   return {
+    formRef, 
     fileRef,
     previews,
     current,
-    title,
-    setTitle,
-    content,
-    setContent,
     isSubmitting,
     isUploadingFiles,
     openFile,
