@@ -108,16 +108,16 @@ export default function PostWritePage() {
                     <button
                       onClick={goToPrevious}
                       aria-label="이전"
-                      className="absolute top-1/2 -left-10 -translate-y-1/2 rotate-180 p-3"
+                      className="absolute top-1/2 -left-10 -translate-y-1/2 p-3"
                     >
-                      <ArrowFilled />
+                      <ArrowFilled direction="left" />
                     </button>
                     <button
                       onClick={goToNext}
                       aria-label="다음"
                       className="absolute top-1/2 -right-10 -translate-y-1/2 p-3"
                     >
-                      <ArrowFilled />
+                      <ArrowFilled direction="right" />
                     </button>
                   </>
                 )}
