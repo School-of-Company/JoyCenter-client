@@ -29,6 +29,10 @@ export default function PostWritePage() {
     submitPost,
   } = usePostWrite();
 
+  const handleBack = () => {
+    router.back();
+  };
+
   const handleSubmit = async () => {
     const ok = await submitPost();
     if (ok) router.push('/main');
@@ -40,7 +44,7 @@ export default function PostWritePage() {
         <div className="w-225 p-3">
           <div
             className="text-body5 flex cursor-pointer items-center gap-2 text-gray-900"
-            onClick={() => router.back()}
+            onClick={handleBack}
           >
             <Arrow direction="left" width={12} height={12} color="#000000" />
             <span>돌아가기</span>
@@ -144,7 +148,7 @@ export default function PostWritePage() {
           <div className="mt-3">
             <div className="flex justify-end gap-4 p-1 pr-2">
               <button
-                onClick={() => router.back()}
+                onClick={handleBack}
                 className="border-main-yellow-800 text-body3 rounded-lg border px-8 py-2 text-gray-900"
               >
                 취소
