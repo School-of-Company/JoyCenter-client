@@ -6,8 +6,11 @@ import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import Trash from '@/shared/assets/svg/trash';
 import { usePostWrite } from '@/widgets/postWrite/model/usePostWrite';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function PostWritePage() {
+  const router = useRouter();
+
   const {
     fileRef,
     previews,
@@ -24,8 +27,12 @@ export default function PostWritePage() {
     goToPrevious,
     goToNext,
     submitPost,
-    router,
   } = usePostWrite();
+
+  const handleSubmit = async () => {
+    const ok = await submitPost();
+    if (ok) router.push('/main');
+  };
 
   return (
     <>
@@ -38,6 +45,7 @@ export default function PostWritePage() {
             <Arrow direction="left" width={12} height={12} color="#000000" />
             <span>돌아가기</span>
           </div>
+
           <div className="mt-3">
             <input
               type="text"
@@ -48,6 +56,7 @@ export default function PostWritePage() {
             />
             <hr className="mt-2 border-gray-600" />
           </div>
+
           <div className="mt-3">
             <div className="text-body4 relative flex justify-end gap-6 p-2 text-gray-400">
               {previews.length > 0 && (
@@ -77,6 +86,7 @@ export default function PostWritePage() {
                 />
               </div>
             </div>
+
             {previews.length > 0 && (
               <div className="relative mt-2">
                 <div className="overflow-hidden rounded-2xl border border-gray-100">
@@ -123,12 +133,14 @@ export default function PostWritePage() {
               </div>
             )}
           </div>
+
           <textarea
             placeholder="글을 작성하세요"
             className="text-body3 mt-2 min-h-125 w-full resize-none rounded-2xl border border-gray-100 p-5 placeholder-gray-400 focus:outline-none"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
+
           <div className="mt-3">
             <div className="flex justify-end gap-4 p-1 pr-2">
               <button
@@ -139,7 +151,7 @@ export default function PostWritePage() {
               </button>
               <button
                 className="bg-main-yellow-100 border-main-yellow-400 text-body3 rounded-lg border px-8 py-2 text-gray-900"
-                onClick={submitPost}
+                onClick={handleSubmit}
                 disabled={isSubmitting || isUploadingFiles}
               >
                 {isSubmitting
