@@ -6,6 +6,7 @@ import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import Trash from '@/shared/assets/svg/trash';
 import { usePostWrite } from '@/widgets/postWrite/model/usePostWrite';
+import Image from 'next/image';
 
 export default function PostWritePage() {
   const {
@@ -63,10 +64,7 @@ export default function PostWritePage() {
               )}
 
               <div className="flex items-center gap-2">
-                <button
-                  className="flex items-center gap-2"
-                  onClick={openFile}
-                >
+                <button className="flex items-center gap-2" onClick={openFile}>
                   <FolderIcon />
                   <span>파일 추가</span>
                 </button>
@@ -93,11 +91,13 @@ export default function PostWritePage() {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <img
+                      <Image
                         key={current}
                         src={previews[current].url}
                         alt={previews[current].name}
-                        className="h-full w-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="100vw"
                       />
                     )}
                   </div>
