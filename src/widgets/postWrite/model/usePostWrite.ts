@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import { uploadAttachment, deleteAttachment, createPost } from '../api/write';
+import { uploadAttachment, deleteAttachment } from '../api/attachments';
+import { createPost } from '../api/post';
 import type { AttachmentType, Preview, CreatePostBlock } from './types';
 
 export const usePostWrite = () => {
