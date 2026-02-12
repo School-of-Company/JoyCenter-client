@@ -1,15 +1,18 @@
 'use client';
 
 import Logo from '@/shared/assets/svg/Logo';
+import { useScrollSection } from '@jump-section/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const pathname = usePathname();
   const isMain = pathname === '/main';
+  const { scrollTo } = useScrollSection();
 
   return (
     <header
+      suppressHydrationWarning
       className={`flex w-full items-center justify-around py-[5px] ${
         isMain
           ? 'absolute top-0 left-0 z-50 bg-[rgba(255,255,255,0.50)]'
@@ -20,9 +23,20 @@ export default function Header() {
         <Logo />
       </Link>
       <nav className="flex items-center gap-14">
-        <Link href="" className="text-body1">
+        <button
+          type="button"
+          onClick={() => scrollTo('introduce')}
+          className="text-body1 cursor-pointer border-none bg-transparent"
+        >
           기관 소개
-        </Link>
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollTo('information')}
+          className="text-body1 cursor-pointer border-none bg-transparent"
+        >
+          기관 정보
+        </button>
         <Link href="/post" className="text-body1">
           게시판
         </Link>
