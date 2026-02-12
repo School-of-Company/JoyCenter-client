@@ -5,7 +5,7 @@ import Arrow from '@/shared/assets/svg/Arrow';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import Trash from '@/shared/assets/svg/trash';
 import { usePostWrite } from '@/widgets/postWrite/model/usePostWrite';
-import Image from 'next/image';
+import Media from '@/shared/ui/Media';
 import { useRouter } from 'next/navigation';
 
 export default function PostWritePage() {
@@ -98,24 +98,14 @@ export default function PostWritePage() {
             <div className="relative mt-2">
               <div className="overflow-hidden rounded-2xl border border-gray-100">
                 <div className="relative -mx-3 h-125 w-[calc(100%+24px)]">
-                  {previews[current].attachmentsType === 'VIDEO' ? (
-                    <video
-                      key={current}
-                      src={previews[current].url}
-                      controls
-                      playsInline
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <Image
-                      key={current}
-                      src={previews[current].url}
-                      alt={previews[current].name}
-                      fill
-                      className="object-cover"
-                      sizes="100vw"
-                    />
-                  )}
+                  <Media
+                    key={current}
+                    type={previews[current].attachmentsType}
+                    src={previews[current].url}
+                    alt={previews[current].name}
+                    className="h-full w-full object-cover"
+                    sizes="100vw"
+                  />
                 </div>
               </div>
 
