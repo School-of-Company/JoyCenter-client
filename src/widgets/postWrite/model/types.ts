@@ -8,22 +8,22 @@ export interface UploadAttachmentParams {
 }
 
 export interface AttachmentResponse {
-  attachmentId: number;
-  attachmentUrl: string;
-  attachmentsType: AttachmentType;
+  attachmentsId: number;
+  url: string;
+  attachmentType: AttachmentType;
 }
 
 export type CreatePostBlock =
   | {
-      order: number;
-      blockType: 'TEXT';
-      text: string;
-    }
+    order: number;
+    blockType: 'TEXT';
+    text: string;
+  }
   | {
-      order: number;
-      blockType: 'ATTACHMENT';
-      attachmentId: number;
-    };
+    order: number;
+    blockType: 'ATTACHMENT';
+    attachmentId: number;
+  };
 
 export interface CreatePostParams {
   title: string;
@@ -43,27 +43,27 @@ export interface PostResponse {
 
 export type PostBlock =
   | {
-      blockId: number;
-      order: number;
-      type: 'TEXT';
-      text: string;
-    }
+    blockId: number;
+    order: number;
+    type: 'TEXT';
+    text: string;
+  }
   | {
-      blockId: number;
-      order: number;
-      type: 'ATTACHMENT';
-      attachment: {
-        attachmentId: number;
-        attachmentsType: AttachmentType;
-        attachmentUrl: string;
-      };
+    blockId: number;
+    order: number;
+    type: 'ATTACHMENT';
+    attachment: {
+      attachmentId: number;
+      attachmentsType: AttachmentType;
+      attachmentUrl: string;
     };
+  };
 
 export interface Preview {
-  tempId: string; 
+  tempId: string;
   name: string;
-  url: string;   
+  url: string;
   attachmentsType: AttachmentType;
-  attachmentId?: number; 
-  uploading: boolean; 
+  attachmentId?: number;
+  uploading: boolean;
 }
