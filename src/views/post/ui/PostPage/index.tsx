@@ -1,0 +1,117 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import SortDropDown from '@/shared/ui/SortDropDown';
+import PostPreview from '@/shared/ui/PostPreview';
+import PostPreviewLoad from '@/shared/ui/PostPreview/Load';
+import Arrow from '@/shared/assets/svg/Arrow';
+import { usePostList } from '@/entity/post/model/usePostList';
+import { SortType } from '@/shared/types/post';
+
+const isImageFile = (url: string | undefined): boolean => {
+  if (!url) return false;
+  const imageExtensions = ['.png', '.jpg'];
+  return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
+};
+
+export default function PostPageView() {
+  const router = useRouter();
+  const [currentPage, setCurrentPage] = useState(0);
+  const [sortType, setSortType] = useState<SortType>('CREATED_AT_DESC');
+
+  const { data, isLoading, error } = usePostList({
+    sort: sortType,
+    page: currentPage,
+    size: 6,
+  });
+
+  const handlePrevPage = () => {
+    if (data?.page?.hasPrevious) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (data?.page?.hasNext) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePostClick = (postId: number) => {
+    router.push(`/postDetail/${postId}`);
+  };
+
+  const posts = data?.content || [];
+  const pageInfo = data?.page;
+
+  return (
+    <div className="flex justify-center">
+      <div className="flex w-286 flex-col gap-7">
+        <div className="mt-20 flex items-end justify-between self-stretch">
+          <h1 className="text-h1 text-gray-900">게시판</h1>
+          <SortDropDown onSortChange={setSortType} />
+        </div>
+
+        {isLoading ? (
+          <div className="grid grid-cols-3 gap-x-6 gap-y-12">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <PostPreviewLoad key={index} />
+            ))}
+          </div>
+        ) : error ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-red-500">
+              게시글을 불러오는데 실패했습니다.
+            </p>
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="flex h-96 items-center justify-center">
+            <p className="text-body1 text-gray-500">게시글이 없습니다.</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-3 gap-x-6 gap-y-12">
+              {posts.map((post) => {
+                const thumbnailUrl =
+                  post.thumbnail?.url && isImageFile(post.thumbnail.url)
+                    ? post.thumbnail.url
+                    : undefined;
+
+                return (
+                  <PostPreview
+                    key={post.id}
+                    imageUrl={thumbnailUrl}
+                    member={post.member.email}
+                    title={post.title}
+                    date={post.createdAt.split('T')[0]}
+                    onClick={() => handlePostClick(post.id)}
+                  />
+                );
+              })}
+            </div>
+            {pageInfo && (
+              <div className="mt-8 flex items-center justify-center gap-5">
+                <button
+                  onClick={handlePrevPage}
+                  disabled={!pageInfo?.hasPrevious}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="left" color="black" />
+                </button>
+                <p className="text-body1">{pageInfo.number + 1}</p>
+                <button
+                  onClick={handleNextPage}
+                  disabled={!pageInfo?.hasNext}
+                  className="cursor-pointer"
+                >
+                  <Arrow direction="right" color="black" />
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
