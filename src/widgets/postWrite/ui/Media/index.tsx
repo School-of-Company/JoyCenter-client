@@ -2,7 +2,7 @@ import FolderIcon from '@/shared/assets/svg/Folder';
 import ArrowFilled from '@/shared/assets/svg/arrowFilled';
 import Trash from '@/shared/assets/svg/trash';
 import Media from '@/shared/ui/Media';
-import { Preview } from '@/widgets/postWrite/model/types';
+import { Preview } from '@/entity/postWrite/model/types';
 
 interface PostWriteMediaProps {
   previews: Preview[];

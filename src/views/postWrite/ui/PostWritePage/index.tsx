@@ -1,10 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { usePostWrite } from '@/widgets/postWrite/model/usePostWrite';
-import { PostWriteHeader } from './components/PostWriteHeader';
-import { PostWriteMedia } from './components/PostWriteMedia';
-import { PostWriteActions } from './components/PostWriteActions';
+import { usePostWrite } from '@/entity/postWrite/model/usePostWrite';
+import { PostWriteHeader } from '@/widgets/postWrite/ui/Header';
+import { PostWriteMedia } from '@/widgets/postWrite/ui/Media';
+import { PostWriteActions } from '@/widgets/postWrite/ui/Actions';
 
 export default function PostWritePage() {
   const router = useRouter();
