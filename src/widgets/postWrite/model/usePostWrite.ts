@@ -14,6 +14,11 @@ export const usePostWrite = () => {
   const [previews, setPreviews] = useState<Preview[]>([]);
   const [current, setCurrent] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
 
   useEffect(() => {
     previewsRef.current = previews;
@@ -31,7 +36,7 @@ export const usePostWrite = () => {
         if (p.url.startsWith('blob:')) {
           try {
             URL.revokeObjectURL(p.url);
-          } catch {}
+          } catch { }
         }
       });
     };
@@ -39,9 +44,11 @@ export const usePostWrite = () => {
 
   const openFile = () => fileRef.current?.click();
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : [];
-    if (files.length === 0) return;
+    if (files.length === 0) {
+      return;
+    }
 
     const newPreviews: Preview[] = files.map((f) => {
       const attachmentsType: AttachmentType = f.type.startsWith('video/') ? 'VIDEO' : 'IMAGE';
@@ -66,7 +73,7 @@ export const usePostWrite = () => {
 
     if (fileRef.current) fileRef.current.value = '';
 
-    newPreviews.forEach(async (preview, index) => {
+    await Promise.all(newPreviews.map(async (preview, index) => {
       const file = files[index];
       const uploadOrder = previousLength + index + 1;
 
@@ -74,6 +81,7 @@ export const usePostWrite = () => {
       abortControllersRef.current.set(preview.tempId, controller);
 
       try {
+
         const uploadedData = await uploadAttachment({
           file,
           attachmentsType: preview.attachmentsType,
@@ -81,32 +89,33 @@ export const usePostWrite = () => {
           signal: controller.signal,
         });
 
+
         setPreviews((prev) => {
           const next = prev.map((item) => {
             if (item.tempId !== preview.tempId) return item;
 
             const temporaryUrl = item.url;
-            if (temporaryUrl.startsWith('blob:')) {
+            const newUrl = uploadedData.url || temporaryUrl;
+
+            if (uploadedData.url && temporaryUrl.startsWith('blob:')) {
               try {
                 URL.revokeObjectURL(temporaryUrl);
-              } catch {}
+              } catch { }
             }
 
             return {
               ...item,
-              url: uploadedData.attachmentUrl,
-              attachmentsType: uploadedData.attachmentsType,
-              attachmentId: uploadedData.attachmentId,
+              url: newUrl,
+              attachmentsType: uploadedData.attachmentType,
+              attachmentId: uploadedData.attachmentsId,
               uploading: false,
             };
           });
-
           previewsRef.current = next;
           return next;
         });
       } catch (err) {
         if (axios.isCancel(err)) {
-          console.log('Upload canceled for', preview.name);
           return;
         }
 
@@ -130,7 +139,7 @@ export const usePostWrite = () => {
       } finally {
         abortControllersRef.current.delete(preview.tempId);
       }
-    });
+    }));
   };
 
   const removeFile = async () => {
@@ -170,7 +179,7 @@ export const usePostWrite = () => {
     } else {
       try {
         URL.revokeObjectURL(targetFile.url);
-      } catch {}
+      } catch { }
     }
   };
 
@@ -185,17 +194,10 @@ export const usePostWrite = () => {
   const isUploadingFiles = previews.some((p) => p.uploading);
 
   const submitPost = async (): Promise<boolean> => {
-    const formEl = formRef.current;
-    if (!formEl) {
-      alert('폼이 존재하지 않습니다');
-      return false;
-    }
+    const trimmedTitle = title.trim();
+    const trimmedContent = content.trim();
 
-    const fd = new FormData(formEl);
-    const title = String(fd.get('title') ?? '').trim();
-    const content = String(fd.get('content') ?? '').trim();
-
-    if (!title) {
+    if (!trimmedTitle) {
       alert('제목을 입력하세요');
       return false;
     }
@@ -210,11 +212,11 @@ export const usePostWrite = () => {
       const blocks: CreatePostBlock[] = [];
       let order = 0;
 
-      if (content) {
+      if (trimmedContent) {
         blocks.push({
           order: order++,
           blockType: 'TEXT',
-          text: content,
+          text: trimmedContent,
         });
       }
 
@@ -230,7 +232,7 @@ export const usePostWrite = () => {
         });
       });
 
-      await createPost({ title, blocks });
+      await createPost({ title: trimmedTitle, blocks });
       return true;
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -250,12 +252,15 @@ export const usePostWrite = () => {
   };
 
   return {
-    formRef, 
     fileRef,
     previews,
     current,
     isSubmitting,
     isUploadingFiles,
+    title,
+    content,
+    onTitleChange,
+    onContentChange,
     openFile,
     onFile,
     removeFile,
