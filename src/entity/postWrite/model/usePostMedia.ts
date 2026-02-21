@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { uploadAttachment, deleteAttachment } from '../api/attachments';
-import type { AttachmentType, Preview } from './types';
+import type { Preview } from './types';
 
 export const usePostMedia = () => {
     const fileRef = useRef<HTMLInputElement>(null);
