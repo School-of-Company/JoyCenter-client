@@ -24,7 +24,7 @@ export const usePostMedia = () => {
         if (p.url.startsWith('blob:')) {
           try {
             URL.revokeObjectURL(p.url);
-          } catch { }
+          } catch {}
         }
       });
     };
@@ -71,7 +71,7 @@ export const usePostMedia = () => {
               if (item.url.startsWith('blob:')) {
                 try {
                   URL.revokeObjectURL(item.url);
-                } catch { }
+                } catch {}
               }
               return {
                 ...item,
@@ -121,7 +121,7 @@ export const usePostMedia = () => {
     } else if (target.url.startsWith('blob:')) {
       try {
         URL.revokeObjectURL(target.url);
-      } catch { }
+      } catch {}
     }
   };
 

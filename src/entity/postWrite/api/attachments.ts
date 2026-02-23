@@ -1,5 +1,8 @@
 import { instance } from '@/shared/lib/axios';
-import type { UploadAttachmentParams, AttachmentResponse } from '../model/types';
+import type {
+  UploadAttachmentParams,
+  AttachmentResponse,
+} from '../model/types';
 
 export const uploadAttachment = async ({
   file,

@@ -6,7 +6,11 @@ interface PostWriteHeaderProps {
   onBack: () => void;
 }
 
-export const PostWriteHeader = ({ title, onTitleChange, onBack }: PostWriteHeaderProps) => (
+export const PostWriteHeader = ({
+  title,
+  onTitleChange,
+  onBack,
+}: PostWriteHeaderProps) => (
   <>
     <div
       className="text-body5 flex cursor-pointer items-center gap-2 text-gray-900"
