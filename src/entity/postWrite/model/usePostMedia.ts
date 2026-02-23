@@ -107,6 +107,11 @@ export const usePostMedia = () => {
     setPreviews((prev) => prev.filter((_, i) => i !== current));
     setCurrent((prev) => (prev > 0 ? prev - 1 : 0));
 
+    const controller = abortControllersRef.current.get(target.tempId);
+    if (controller) {
+      controller.abort();
+    }
+
     if (typeof target.attachmentId === 'number') {
       try {
         await deleteAttachment(target.attachmentId);
