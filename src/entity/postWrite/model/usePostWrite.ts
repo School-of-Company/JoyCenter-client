@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 import { createPost } from '../api/post';
 import { usePostMedia } from './usePostMedia';
 import type { Preview, CreatePostBlock } from './types';
@@ -11,20 +12,22 @@ export const usePostWrite = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value);
-  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => setContent(e.target.value);
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setTitle(e.target.value);
+  const onContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setContent(e.target.value);
 
   const submitPost = async (): Promise<boolean> => {
     const trimmedTitle = title.trim();
     const trimmedContent = content.trim();
 
     if (!trimmedTitle) {
-      alert('제목을 입력하세요');
+      toast.error('제목을 입력하세요');
       return false;
     }
 
     if (media.isUploadingFiles) {
-      alert('파일 업로드가 완료될 때까지 기다려주세요');
+      toast.error('파일 업로드가 완료될 때까지 기다려주세요');
       return false;
     }
 
@@ -42,7 +45,8 @@ export const usePostWrite = () => {
       }
 
       const uploaded = media.previews.filter(
-        (p): p is Preview & { attachmentId: number } => typeof p.attachmentId === 'number',
+        (p): p is Preview & { attachmentId: number } =>
+          typeof p.attachmentId === 'number',
       );
 
       uploaded.forEach((p) => {
@@ -65,7 +69,7 @@ export const usePostWrite = () => {
       } else {
         console.error('게시 실패', err);
       }
-      alert('게시 실패');
+      toast.error('게시 실패');
       return false;
     } finally {
       setIsSubmitting(false);
