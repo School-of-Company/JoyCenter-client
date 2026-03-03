@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import HomebasePage from '@/views/postWrite/ui/PostWritePage';
+import PostWritePage from '@/views/postWrite/ui/PostWritePage';
 
 export const metadata: Metadata = {
   title: '글 쓰기',
@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <HomebasePage />;
+  return <PostWritePage />;
 }
