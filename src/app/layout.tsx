@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   },
   description: '더 기쁘게, 더 따뜻하게 더기쁨노인복지센터 공식 홈페이지',
   verification: {
-    google: 'OLzejcP_7MSoaXG--kTDq5vKtHHuY7cd_yZjuhiLFmY',
+    google: 'gHhBwfHWdKD_7JX44AncUnNtxSw9VZQac-Ry6tuhaiE',
   },
 
   alternates: {
