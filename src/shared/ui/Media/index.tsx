@@ -17,6 +17,8 @@ export default function Media({
   sizes = '600px',
   controls = true,
 }: MediaProps) {
+  if (!src) return null;
+
   if (type === 'VIDEO') {
     return (
       <video
