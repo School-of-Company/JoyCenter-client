@@ -3,11 +3,13 @@ import Image from 'next/image';
 
 export default function MainSection() {
   return (
-    <section className="relative w-full overflow-x-hidden">
+    <section className="relative min-h-svh w-full overflow-x-hidden">
       <Image
-        src="/bgImg.png"
+        src="/bgImg.webp"
         alt="배경"
         fill
+        sizes="100vw"
+        quality={75}
         className="object-cover"
         priority
       />
