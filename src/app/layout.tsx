@@ -4,8 +4,10 @@ import Header from '@/shared/ui/Header';
 import { QueryProvider } from '@/shared/lib/QueryProvider';
 import { Toaster } from 'sonner';
 import { ScrollSectionProvider } from '@jump-section/react';
+import { pretendard } from '@/shared/fonts';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://joy-center-client.vercel.app'),
   title: {
     default: '더기쁨노인복지센터',
     template: '%s | 더기쁨노인복지센터',
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://joy-center-client.vercel.app',
   },
-
+  applicationName: '더기쁨노인복지센터',
   openGraph: {
     title: '더기쁨노인복지센터',
     description: '어르신을 위한 복지·문화·프로그램 안내 플랫폼',
@@ -34,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={pretendard.variable}>
       <body suppressHydrationWarning>
         <ScrollSectionProvider>
           <QueryProvider>
