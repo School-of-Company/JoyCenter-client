@@ -42,7 +42,8 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="/_next/image?url=%2FbgImg.webp&w=1920&q=75"
+          imageSrcSet="/_next/image?url=%2FbgImg.webp&w=828&q=75 828w, /_next/image?url=%2FbgImg.webp&w=1920&q=75 1920w"
+          imageSizes="100vw"
           fetchPriority="high"
         />
       </head>
