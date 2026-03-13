@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+* {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+}
+
 @theme {
   /* Colors */
   --color-gray-100: #e6e6e7;
@@ -39,10 +43,6 @@
   --color-black: #000000;
   --color-white: #ffffff;
   --color-error: #ef4444;
-}
-
-html {
-  font-family: 'Pretendard', sans-serif;
 }
 
 /* Font Classes */
