@@ -4,6 +4,7 @@ import Header from '@/shared/ui/Header';
 import { QueryProvider } from '@/shared/lib/QueryProvider';
 import { Toaster } from 'sonner';
 import { ScrollSectionProvider } from '@jump-section/react';
+import { pretendard } from '@/shared/fonts';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://joy-center-client.vercel.app'),
@@ -32,21 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <head>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
-        />
-        <link
-          rel="preload"
-          as="image"
-          imageSrcSet="/_next/image?url=%2FbgImg.webp&w=828&q=75 828w, /_next/image?url=%2FbgImg.webp&w=1920&q=75 1920w"
-          imageSizes="100vw"
-          fetchPriority="high"
-        />
-      </head>
+    <html lang="ko" className={pretendard.variable}>
       <body suppressHydrationWarning>
         <ScrollSectionProvider>
           <QueryProvider>
