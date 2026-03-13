@@ -6,6 +6,7 @@ import { Toaster } from 'sonner';
 import { ScrollSectionProvider } from '@jump-section/react';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://joy-center-client.vercel.app'),
   title: {
     default: '더기쁨노인복지센터',
     template: '%s | 더기쁨노인복지센터',
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://joy-center-client.vercel.app',
   },
-
+  applicationName: '더기쁨노인복지센터',
   openGraph: {
     title: '더기쁨노인복지센터',
     description: '어르신을 위한 복지·문화·프로그램 안내 플랫폼',
@@ -32,6 +33,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/_next/image?url=%2FbgImg.webp&w=1920&q=75"
+          fetchPriority="high"
+        />
+      </head>
       <body suppressHydrationWarning>
         <ScrollSectionProvider>
           <QueryProvider>
