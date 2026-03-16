@@ -139,16 +139,18 @@ export default function KakaoMap() {
 
   return (
     <>
-      <div className="mobile:max-w-[300px] flex h-[300px] w-full max-w-[500px] items-center justify-center rounded-[20px] bg-gray-100">
+      <div className="mobile:max-w-[300px] relative h-[300px] w-full max-w-[500px] overflow-hidden rounded-[20px] bg-gray-100">
+        <div ref={mapRef} className="h-full w-full" />
+
         {isLoading && !hasError && (
-          <div className="flex flex-col items-center gap-2">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500" />
             <p className="text-sm text-gray-600">지도 로딩 중...</p>
           </div>
         )}
 
         {hasError && (
-          <div className="flex flex-col items-center gap-3 p-6 text-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
             <svg
               className="h-12 w-12 text-red-500"
               fill="none"
@@ -172,11 +174,6 @@ export default function KakaoMap() {
             </div>
           </div>
         )}
-
-        <div
-          ref={mapRef}
-          className={`h-full w-full rounded-[20px] ${isLoading || hasError ? 'hidden' : ''}`}
-        />
       </div>
     </>
   );
