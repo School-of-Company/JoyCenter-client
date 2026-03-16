@@ -143,15 +143,22 @@ export default function KakaoMap() {
         <div ref={mapRef} className="h-full w-full" />
 
         {isLoading && !hasError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+          <div
+            role="status"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+          >
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-500" />
             <p className="text-sm text-gray-600">지도 로딩 중...</p>
           </div>
         )}
 
         {hasError && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+          <div
+            role="alert"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center"
+          >
             <svg
+              aria-hidden="true"
               className="h-12 w-12 text-red-500"
               fill="none"
               stroke="currentColor"
