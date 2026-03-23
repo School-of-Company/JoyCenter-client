@@ -11,7 +11,7 @@ import { SortType } from '@/shared/types/post';
 
 const isImageFile = (url: string | undefined): boolean => {
   if (!url) return false;
-  const imageExtensions = ['.png', '.jpg'];
+  const imageExtensions = ['.png', '.jpg', '.jpeg', '.webp', '.avif'];
   return imageExtensions.some((ext) => url.toLowerCase().endsWith(ext));
 };
 

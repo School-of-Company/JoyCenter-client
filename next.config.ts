@@ -2,35 +2,6 @@ import type { NextConfig } from 'next';
 
 const isProd = process.env.NODE_ENV === 'production';
 
-const cspDev = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http://t1.daumcdn.net http://dapi.kakao.com",
-  "style-src 'self' 'unsafe-inline' https:",
-  "img-src 'self' https: data: blob: http://t1.daumcdn.net http://dapi.kakao.com http://mts.daumcdn.net",
-  "font-src 'self' https: data:",
-  "connect-src 'self' https: http://dapi.kakao.com ws: wss:",
-  "media-src 'self' https: data: blob:",
-  "frame-src 'self' https: http://t1.daumcdn.net http://dapi.kakao.com",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-].join('; ');
-
-const cspProd = [
-  "default-src 'self'",
-
-  "script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://www.gstatic.com https://dapi.kakao.com https://t1.daumcdn.net",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://*.kakao.com https://*.daumcdn.net https://t1.daumcdn.net https://map.kakao.com https://dapi.kakao.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "connect-src 'self' https://oauth2.googleapis.com https://www.googleapis.com https://kapi.kakao.com https://kauth.kakao.com https://dapi.kakao.com wss:",
-  "media-src 'self' data: blob:",
-  "frame-src 'self' https://accounts.google.com https://kauth.kakao.com",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-].join('; ');
-
 const securityHeaders = [
   { key: 'X-DNS-Prefetch-Control', value: 'on' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -39,7 +10,7 @@ const securityHeaders = [
   {
     key: 'Permissions-Policy',
     value:
-      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), storage-access=(self "https://dapi.kakao.com")',
   },
   ...(isProd
     ? [
@@ -49,10 +20,6 @@ const securityHeaders = [
         },
       ]
     : []),
-  {
-    key: 'Content-Security-Policy',
-    value: isProd ? cspProd : cspDev,
-  },
 ];
 
 const nextConfig: NextConfig = {
