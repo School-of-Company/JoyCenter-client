@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     url: 'https://joy-center-client.vercel.app',
     siteName: '더기쁨노인복지센터',
     type: 'website',
+    images: [{ url: 'https://joy-center-client.vercel.app/bgImg.png', width: 1200, height: 630 }],
   },
 };
 
