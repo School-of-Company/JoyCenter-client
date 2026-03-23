@@ -7,10 +7,10 @@ const BASE_URL = 'https://joy-center-client.vercel.app';
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }): Promise<Metadata> {
   try {
-    const { id } = await params;
+    const { id } = params;
     const post = await getPostDetail(Number(id));
 
     const description =
