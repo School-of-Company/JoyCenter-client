@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import './globals.css';
 import Header from '@/shared/ui/Header';
 import { QueryProvider } from '@/shared/lib/QueryProvider';
@@ -30,14 +31,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   return (
     <html lang="ko" className={pretendard.variable}>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning nonce={nonce}>
         <ScrollSectionProvider>
           <QueryProvider>
             <Header />
