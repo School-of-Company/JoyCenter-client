@@ -1,9 +1,9 @@
 'use client';
 
-import { useScrollSection } from '@jump-section/react';
+import { useScrollTo } from '@/shared/hooks/useScrollTo';
 
 export default function DoubleDown() {
-  const { scrollTo } = useScrollSection();
+  const { scrollTo } = useScrollTo();
   return (
     <svg
       onClick={() => scrollTo('introduce')}

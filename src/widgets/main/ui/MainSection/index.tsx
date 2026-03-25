@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function MainSection() {
   return (
-    <section className="relative h-screen w-screen overflow-hidden bg-black">
+    <section className="relative h-screen w-full overflow-hidden bg-black">
       <Image
         src="/bgImg.webp"
         alt="배경"
