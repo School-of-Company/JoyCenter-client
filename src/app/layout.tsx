@@ -14,9 +14,6 @@ export const metadata: Metadata = {
     template: '%s | 더기쁨노인복지센터',
   },
   description: '더 기쁘게, 더 따뜻하게 더기쁨노인복지센터 공식 홈페이지',
-  verification: {
-    google: 'gHhBwfHWdKD_7JX44AncUnNtxSw9VZQac-Ry6tuhaiE',
-  },
 
   alternates: {
     canonical: 'https://www.joycenter.kr',
