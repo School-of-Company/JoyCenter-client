@@ -1,14 +1,14 @@
 'use client';
 
 import Logo from '@/shared/assets/svg/Logo';
-import { useScrollSection } from '@jump-section/react';
+import { useScrollTo } from '@/shared/hooks/useScrollTo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const pathname = usePathname();
   const isMain = pathname === '/main';
-  const { scrollTo } = useScrollSection();
+  const { scrollTo } = useScrollTo();
 
   return (
     <header
