@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getPostDetail } from '@/entity/postDetail/api/postDetail';
 import PostDetail from '@/views/postDetail/ui/PostDetailPage';
 
-const BASE_URL = 'https://joy-center-client.vercel.app';
+const BASE_URL = 'https://www.joycenter.kr';
 
 export async function generateMetadata({
   params,

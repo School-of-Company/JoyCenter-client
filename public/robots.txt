@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://joy-center-client.vercel.app
+Host: https://www.joycenter.kr
 
 # Sitemaps
-Sitemap: https://joy-center-client.vercel.app/sitemap.xml
+Sitemap: https://www.joycenter.kr/sitemap.xml

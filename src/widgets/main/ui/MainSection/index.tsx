@@ -3,19 +3,20 @@ import Image from 'next/image';
 
 export default function MainSection() {
   return (
-    <section className="relative min-h-svh w-full overflow-x-hidden">
+    <section className="relative h-screen w-full overflow-hidden bg-black">
       <Image
         src="/bgImg.webp"
         alt="배경"
-        fill
-        sizes="100vw"
+        width={3072}
+        height={2048}
         quality={75}
-        className="object-cover"
+        className="absolute inset-0 h-full w-full object-cover"
         priority
+        sizes="100vw"
       />
       <div className="absolute inset-0 bg-linear-to-r from-black/60 via-black/40 to-transparent" />
 
-      <div className="relative z-10 flex min-h-svh w-full items-center">
+      <div className="absolute inset-0 z-10 flex w-full items-center">
         <div className="relative w-full px-6 text-white md:ml-24 md:max-w-xl md:px-0">
           <div className="pointer-events-none absolute h-[360px] w-[720px] rounded-[520px] bg-[rgba(26,26,27,0.5)] blur-[35px] md:-top-[80px] md:-left-[150px] md:blur-[45px]" />
           <div className="relative flex flex-col items-center justify-center text-center">

@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/postWrite', '/callback'],
       },
     ],
-    sitemap: 'https://joy-center-client.vercel.app/sitemap.xml',
+    sitemap: 'https://www.joycenter.kr/sitemap.xml',
   };
 }
