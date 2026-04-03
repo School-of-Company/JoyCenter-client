@@ -1,5 +1,19 @@
-import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import MainView from '@/views/main/ui/MainView';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://www.joycenter.kr/',
+  },
+  openGraph: {
+    title: '더기쁨노인복지센터',
+    description: '더 기쁘게, 더 따뜻하게 더기쁨노인복지센터 공식 홈페이지',
+    url: 'https://www.joycenter.kr/',
+    type: 'website',
+    images: [{ url: 'https://www.joycenter.kr/bgImg.png', width: 1200, height: 630 }],
+  },
+};
 
 export default function Home() {
-  redirect('/main');
+  return <MainView />;
 }

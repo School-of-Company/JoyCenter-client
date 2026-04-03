@@ -5,7 +5,7 @@ const BASE_URL = 'https://www.joycenter.kr';
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: `${BASE_URL}/main`,
+      url: `${BASE_URL}/`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
