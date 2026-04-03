@@ -34,7 +34,7 @@ const jsonLd = {
   '@type': 'LocalBusiness',
   name: '더기쁨노인복지센터',
   description: '더 기쁘게, 더 따뜻하게 어르신의 일상에 기쁨과 안심을 더하는 노인복지센터',
-  url: 'https://www.joycenter.kr',
+  url: 'https://www.joycenter.kr/',
   telephone: '062-372-3525',
   faxNumber: '062-372-3526',
   address: {
