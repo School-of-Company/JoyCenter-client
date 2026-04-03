@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { getPostDetail } from '@/entity/postDetail/api/postDetail';
 import PostDetail from '@/views/postDetail/ui/PostDetailPage';
 
-const BASE_URL = 'https://www.joycenter.kr';
-
 export async function generateMetadata({
   params,
 }: {
@@ -24,11 +22,11 @@ export async function generateMetadata({
     return {
       title: post.title,
       description,
-      alternates: { canonical: `${BASE_URL}/postDetail/${id}` },
+      alternates: { canonical: `/postDetail/${id}` },
       openGraph: {
         title: post.title,
         description,
-        url: `${BASE_URL}/postDetail/${id}`,
+        url: `/postDetail/${id}`,
         type: 'article',
         ...(image && { images: [{ url: image }] }),
       },
