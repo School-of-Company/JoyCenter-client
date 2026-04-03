@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: ['/', '/main', '/post'],
-        disallow: ['/postWrite', '/callback'],
+        disallow: ['/postWrite', '/callback', '/signin'],
       },
     ],
     sitemap: 'https://www.joycenter.kr/sitemap.xml',
