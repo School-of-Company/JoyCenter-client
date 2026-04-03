@@ -5,10 +5,10 @@ import PostDetail from '@/views/postDetail/ui/PostDetailPage';
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   try {
-    const { id } = params;
+    const { id } = await params;
     const post = await getPostDetail(Number(id));
 
     const description =
