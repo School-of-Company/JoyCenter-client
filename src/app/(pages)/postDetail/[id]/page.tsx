@@ -22,11 +22,11 @@ export async function generateMetadata({
     return {
       title: post.title,
       description,
-      alternates: { canonical: `/postDetail/${id}` },
+      alternates: { canonical: `https://www.joycenter.kr/postDetail/${id}` },
       openGraph: {
         title: post.title,
         description,
-        url: `/postDetail/${id}`,
+        url: `https://www.joycenter.kr/postDetail/${id}`,
         type: 'article',
         ...(image && { images: [{ url: image }] }),
       },
