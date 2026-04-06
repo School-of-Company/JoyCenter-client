@@ -18,14 +18,14 @@ export const metadata: Metadata = {
     '더기쁨',
   ],
   alternates: {
-    canonical: '/',
+    canonical: 'https://www.joycenter.kr/',
   },
   openGraph: {
     title: '더기쁨노인복지센터',
     description: '더 기쁘게, 더 따뜻하게 더기쁨노인복지센터 공식 홈페이지',
-    url: '/',
+    url: 'https://www.joycenter.kr/',
     type: 'website',
-    images: [{ url: '/bgImg.png', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.joycenter.kr/bgImg.png', width: 1200, height: 630 }],
   },
 };
 
