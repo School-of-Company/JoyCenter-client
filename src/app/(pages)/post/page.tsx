@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     '더기쁨 게시판',
   ],
   alternates: {
-    canonical: '/post',
+    canonical: 'https://www.joycenter.kr/post',
   },
   openGraph: {
     title: '게시판 | 더기쁨노인복지센터',
     description: '더기쁨노인복지센터의 공지사항과 소식을 확인하세요.',
-    url: '/post',
+    url: 'https://www.joycenter.kr/post',
     type: 'website',
   },
 };

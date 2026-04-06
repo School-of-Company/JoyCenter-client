@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     '더기쁨',
   ],
   alternates: {
-    canonical: '/',
+    canonical: 'https://www.joycenter.kr/',
   },
   openGraph: {
     title: '더기쁨노인복지센터',

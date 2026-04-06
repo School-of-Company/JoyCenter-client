@@ -14,7 +14,6 @@ export const metadata: Metadata = {
     template: '%s | 더기쁨노인복지센터',
   },
   description: '더 기쁘게, 더 따뜻하게 더기쁨노인복지센터 공식 홈페이지',
-
   applicationName: '더기쁨노인복지센터',
   openGraph: {
     title: '더기쁨노인복지센터',
